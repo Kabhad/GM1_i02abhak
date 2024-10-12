@@ -1,12 +1,8 @@
 package Clases;
 
-enum TipoMaterial {
-	PELOTAS, CANASTAS, CONOS
-}
+import Clases.TipoMaterial;
 
-enum EstadoMaterial {
-	DISPONIBLE, RESERVADO, MAL_ESTADO
-}
+import Clases.EstadoMaterial;
 
 public class Material {
 	

@@ -3,10 +3,13 @@ package Clases;
 import java.util.ArrayList;
 import java.util.List;
 
-enum tamanioPista
+/*enum tamanioPista
 {
 	MINIBASKET, ADULTOS, _3VS3
 }
+*/
+
+import Clases.tamanioPista;
 
 public class Pista {
 

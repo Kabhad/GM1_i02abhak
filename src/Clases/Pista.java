@@ -119,7 +119,7 @@ public class Pista {
 			return false;
 		}
 		
-		if(material.getTipo() == TipoMaterial.CANASTAS && cont_pelotas >= 12) {
+		if(material.getTipo() == TipoMaterial.PELOTAS && cont_pelotas >= 12) {
 			System.out.println("No se pueden añadir más de 12 pelotas.");
 			return false;
 		}

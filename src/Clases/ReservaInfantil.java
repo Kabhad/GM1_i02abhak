@@ -6,7 +6,7 @@ public class ReservaInfantil extends abstractReserva {
     // Atributo específico de ReservaInfantil
     private int numeroNinos;
 
-    // Constructor vacío
+    // Constructor vacío, llama al constructor vacio de abstractReserva, clase padre
     public ReservaInfantil() {
         super();
     }

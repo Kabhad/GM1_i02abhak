@@ -18,7 +18,7 @@ public class mainReservas {
         System.out.println("4. Cancelar reserva");
         System.out.println("5. Consultar reservas futuras");
         System.out.println("6. Consultar reservas por día y pista");
-        System.out.println("7. Volver al menú principal");
+        System.out.println("0. Volver al menú principal");
         System.out.println("=====================================");
         System.out.print("Seleccione una opción: ");
     }
@@ -129,7 +129,7 @@ public class mainReservas {
                     }
                     break;
 
-                case 7:
+                case 0:
                     // Volver al menú principal
                     System.out.println("Volviendo al menú principal...");
                     continuar = false;

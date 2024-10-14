@@ -8,8 +8,8 @@ public abstract class abstractReserva {
     private Date fechaHora;
     private int duracionMinutos;
     private int idPista;
-    private float precio;
-    private float descuento;
+    private Double precio;
+    private Double descuento;
 
     // Constructor vacío
     public abstractReserva() {

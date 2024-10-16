@@ -2,72 +2,80 @@ package es.uco.pw.gestores.jugadores;
 
 import es.uco.pw.classes.jugador.*;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class GestorJugadores {
 	// Atributo que contiene la lista de usuarios registrados
-    private List<Jugador> listaUsuarios;
+    private List<Jugador> listaJugadores;
     
  // Constructor vacío que inicializa la lista de usuarios
     public GestorJugadores() 
     {
-        listaUsuarios = new ArrayList<>();
+        listaJugadores = new ArrayList<>();
     }
     
     // Método para dar de alta a un usuario
-    public boolean darDeAltaUsuario(Jugador nuevoUsuario) 
-    {
+    public boolean altaJugador(Jugador nuevoJugador) {
         // Verificar si el correo electrónico ya está registrado
-        for (Jugador usuario : listaUsuarios) 
-        {
-            if (usuario.getCorreoElectronico().equalsIgnoreCase(nuevoUsuario.getCorreoElectronico()))
-            {
-                System.out.println("El usuario con el correo electrónico " + nuevoUsuario.getCorreoElectronico() + " ya está registrado.");
-                return false; // Usuario ya está registrado
+        for (Jugador jugador : listaJugadores) {
+            if (jugador.getCorreoElectronico().equalsIgnoreCase(nuevoJugador.getCorreoElectronico())) {
+                return false; // Jugador ya está registrado, retorna false
             }
         }
-        // Si no está registrado, agregar a la lista de usuarios
-        listaUsuarios.add(nuevoUsuario);
-        System.out.println("Usuario " + nuevoUsuario.getNombreApellidos() + " registrado con éxito.");
-        return true; // Registro exitoso
+
+        // Si no está registrado, agregar a la lista de jugadores
+        listaJugadores.add(nuevoJugador);
+        return true; // Registro exitoso, retorna true
     }
     
     // Método para modificar la información de un usuario existente
-    public boolean modificarUsuario(String correoElectronico, Jugador datosActualizados)
-    {
-        for (Jugador usuario : listaUsuarios)
-        {
-            if (usuario.getCorreoElectronico().equalsIgnoreCase(correoElectronico))
-            {
-                // Actualizamos la información del usuario
-                usuario.setNombreApellidos(datosActualizados.getNombreApellidos());
-                usuario.setFechaNacimiento(datosActualizados.getFechaNacimiento());
-                usuario.setCorreoElectronico(datosActualizados.getCorreoElectronico());
-                // No modificamos la fecha de inscripción, ya que debe permanecer igual
-                System.out.println("Usuario actualizado correctamente.");
-                return true;
+    public int modificarJugador(String correoElectronico, String nuevoNombre, Date nuevaFechaNacimiento, String nuevoCorreo) {
+        // Buscar el usuario por correo electrónico
+        for (Jugador jugador : listaJugadores) {
+            if (jugador.getCorreoElectronico().equalsIgnoreCase(correoElectronico)) {
+                // Verificar si el nuevo correo ya está en uso (excepto el del propio usuario)
+                for (Jugador usuario : listaJugadores) {
+                    if (!usuario.getCorreoElectronico().equalsIgnoreCase(correoElectronico) &&
+                        usuario.getCorreoElectronico().equalsIgnoreCase(nuevoCorreo)) {
+                        return 0; // El nuevo correo ya está en uso
+                    }
+                }
+
+                // Actualizar los datos del usuario
+                jugador.setNombreApellidos(nuevoNombre);
+                jugador.setFechaNacimiento(nuevaFechaNacimiento);
+                jugador.setCorreoElectronico(nuevoCorreo);
+                return 1; // Modificación exitosa
             }
         }
-        System.out.println("No se encontró un usuario con el correo electrónico: " + correoElectronico);
-        return false; // No se encontró el usuario
+
+        // Si no se encuentra el usuario
+        return -1; // Usuario no encontrado
     }
     
     // Método para listar a los usuarios registrados
-    public void listarUsuarios() 
+    public void listarJugadores()
     {
-    	// Comprobamos si la lista esta vacía
-        if (listaUsuarios.isEmpty()) 
+    	for (Jugador jugador : listaJugadores) 
         {
-            System.out.println("No hay usuarios registrados.");
+            System.out.println("Nombre: " + jugador.getNombreApellidos());
+            System.out.println("Fecha de Nacimiento: " + jugador.getFechaNacimiento());
+            System.out.println("Correo Electrónico: " + jugador.getCorreoElectronico());
+            System.out.println("----------------------------------");
+        }
+    }
+    
+    // Método para comprobar si la lista está vacía
+    public int listaVacia()
+	{
+        if (listaJugadores.isEmpty()) 
+        {
+            return 1;  // Lista vacía
         } 
         else 
         {
-        	System.out.println("Usuarios registrados:");
-            for (Jugador usuario : listaUsuarios) 
-            {
-                System.out.println(usuario.toString());
-                System.out.println("---------------------------");
-            }
+            return 0;  // Lista con jugadores
         }
     }
 }

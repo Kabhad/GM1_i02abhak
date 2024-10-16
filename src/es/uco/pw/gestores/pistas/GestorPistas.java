@@ -113,9 +113,19 @@ public class GestorPistas {
     }
     
     // Método para listar todas las pistas con sus detalles
-    public void listarPistas() {
+    public String listarPistas() {
+        String resultado = "";
+
         for (Pista pista : pistas) {
-            System.out.println(pista.toString());
+            resultado += "Nombre de la Pista: " + pista.getNombrePista() + "\n";
+            resultado += "Disponible: " + (pista.isDisponible() ? "Sí" : "No") + "\n";
+            resultado += "Exterior: " + (pista.isExterior() ? "Sí" : "No") + "\n";
+            resultado += "Tamaño de la Pista: " + pista.getPista().toString() + "\n";
+            resultado += "Máximo de Jugadores: " + pista.getMax_jugadores() + "\n";
+            resultado += "Materiales Disponibles: " + pista.getMateriales().toString() + "\n";
+            resultado += "----------------------------------\n";
         }
+
+        return resultado;
     }
 }

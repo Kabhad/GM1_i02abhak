@@ -55,15 +55,17 @@ public class GestorJugadores {
     }
     
     // Método para listar a los usuarios registrados
-    public void listarJugadores()
-    {
-    	for (Jugador jugador : listaJugadores) 
-        {
-            System.out.println("Nombre: " + jugador.getNombreApellidos());
-            System.out.println("Fecha de Nacimiento: " + jugador.getFechaNacimiento());
-            System.out.println("Correo Electrónico: " + jugador.getCorreoElectronico());
-            System.out.println("----------------------------------");
+    public String listarJugadores() {
+        String resultado = "";
+        
+        for (Jugador jugador : listaJugadores) {
+            resultado += "Nombre: " + jugador.getNombreApellidos() + "\n";
+            resultado += "Fecha de Nacimiento: " + jugador.getFechaNacimiento() + "\n";
+            resultado += "Correo Electrónico: " + jugador.getCorreoElectronico() + "\n";
+            resultado += "----------------------------------\n";
         }
+        
+        return resultado;
     }
     
     // Método para comprobar si la lista está vacía

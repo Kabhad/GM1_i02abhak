@@ -6,20 +6,52 @@ public class ReservaBono extends Reserva {
     private int idBono;
     private int numeroSesion;
     private Bono bono;
+    private Reserva reservaEspecifica; // Contiene la reserva específica (infantil, adulto, familiar)
+    private boolean confirmada = false;
 
-    // Constructor vacío
-    public ReservaBono() {
-        super();
-    }
-
-    // Constructor parametrizado
-    public ReservaBono(int idUsuario, Date fechaHora, int duracionMinutos, int idPista, Bono bono, int numeroSesion) {
+    // Constructor que incluye la reserva específica
+    public ReservaBono(int idUsuario, Date fechaHora, int duracionMinutos, int idPista, Bono bono, int numeroSesion, Reserva reservaEspecifica) {
         super(idUsuario, fechaHora, duracionMinutos, idPista);
         this.bono = bono;
         this.idBono = bono.getIdBono();
         this.numeroSesion = numeroSesion;
+        this.reservaEspecifica = reservaEspecifica; // Guardar la reserva específica (infantil, adulto, familiar)
         this.setDescuento(0.05f); // Descuento del 5% para todas las reservas de bono
-        bono.consumirSesion(); // Consume una sesión del bono
+    }
+
+    // Getter para la reserva específica
+    public Reserva getReservaEspecifica() {
+        return reservaEspecifica;
+    }
+
+    //Método toString() para reservas de bono
+    @Override
+    public String toString() {
+        String detallesEspecificos = "";
+
+        if (reservaEspecifica instanceof ReservaInfantil) {
+            detallesEspecificos = ((ReservaInfantil) reservaEspecifica).toStringEspecifica();
+        } else if (reservaEspecifica instanceof ReservaAdulto) {
+            detallesEspecificos = ((ReservaAdulto) reservaEspecifica).toStringEspecifica();
+        } else if (reservaEspecifica instanceof ReservaFamiliar) {
+            detallesEspecificos = ((ReservaFamiliar) reservaEspecifica).toStringEspecifica();
+        }
+
+        return "ReservaBono [" + super.toString() + 
+               ", idBono=" + idBono +
+               ", numeroSesion=" + numeroSesion +
+               ", bono=" + bono +
+               ", reservaEspecifica=" + detallesEspecificos + "]";
+    }
+
+
+    public void confirmarReserva() {
+        if (!confirmada) {
+            bono.consumirSesion(); // Consume la sesión solo si la reserva se confirma
+            confirmada = true; // Cambia el estado a confirmado
+        } else {
+            throw new IllegalStateException("La reserva ya ha sido confirmada.");
+        }
     }
 
     // Método para crear una reserva de bono de tipo infantil
@@ -69,11 +101,6 @@ public class ReservaBono extends Reserva {
 
     public void setBono(Bono bono) {
         this.bono = bono;
-    }
-
-    @Override
-    public String toString() {
-        return "ReservaBono [idBono=" + idBono + ", numeroSesion=" + numeroSesion + ", bono=" + bono + "]";
     }
 
     // Método para consumir una sesión del bono

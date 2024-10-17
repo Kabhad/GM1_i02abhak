@@ -14,9 +14,10 @@ public class Bono {
     }
 
     // Constructor parametrizado
-    public Bono(int idBono, int idUsuario, Date fechaPrimeraReserva) {
+    public Bono(int idBono, int idUsuario, int numeroSesion, Date fechaPrimeraReserva) {
         this.idBono = idBono;
         this.idUsuario = idUsuario;
+        this.sesionesRestantes = 6 - numeroSesion; // Calcular sesiones restantes
         this.fechaCaducidad = calcularFechaCaducidad(fechaPrimeraReserva);
     }
 

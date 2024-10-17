@@ -6,7 +6,9 @@ import java.util.Date;
 
 public class Jugador 
 {
-	//Atributos
+	// Atributos
+	private static int idCounter = 1; // Contador estático para generar IDs únicos
+	private int idJugador;
 	private String nombreApellidos;
     private Date fechaNacimiento;
     private Date fechaInscripcion;
@@ -15,81 +17,83 @@ public class Jugador
     // Constructor vacío (sin parámetros)
     public Jugador() 
     {
-       this.fechaInscripcion = new Date(); // Fecha de inscripción será la actual
+       this.idJugador = idCounter++; // Asignar un ID único y aumentar el contador
     }
     
-    // Constructor parametrizado (sin la fecha de inscripción)
+    public void setIdJugador(int idJugador) {
+		this.idJugador = idJugador;
+	}
+
+	// Constructor parametrizado (sin la fecha de inscripción)
     public Jugador(String nombreApellidos, Date fechaNacimiento, String correoElectronico) {
+        this();
         this.nombreApellidos = nombreApellidos;
         this.fechaNacimiento = fechaNacimiento;
         this.correoElectronico = correoElectronico;
-        this.fechaInscripcion = new Date(); // Fecha de inscripción será la actual
     }
 
-    //Métodos getter y setter para todos los atributos
-	public String getNombreApellidos() 
-	{
+    // Métodos getter para el ID
+	public int getIdJugador() {
+		return idJugador;
+	}
+
+    // Métodos getter y setter para los demás atributos
+	public String getNombreApellidos() {
 		return nombreApellidos;
 	}
 
-	public void setNombreApellidos(String nombreApellidos) 
-	{
+	public void setNombreApellidos(String nombreApellidos) {
 		this.nombreApellidos = nombreApellidos;
 	}
 
-	public Date getFechaNacimiento() 
-	{
+	public Date getFechaNacimiento() {
 		return fechaNacimiento;
 	}
 
-	public void setFechaNacimiento(Date fechaNacimiento) 
-	{
+	public void setFechaNacimiento(Date fechaNacimiento) {
 		this.fechaNacimiento = fechaNacimiento;
 	}
 
-	public Date getFechaInscripcion() 
-	{
+	public Date getFechaInscripcion() {
 		return fechaInscripcion;
 	}
 
-	public void setFechaInscripcion(Date fechaInscripcion) 
-	{
+	public void setFechaInscripcion(Date fechaInscripcion) {
 		this.fechaInscripcion = fechaInscripcion;
 	}
 
-	public String getCorreoElectronico() 
-	{
+	public String getCorreoElectronico() {
 		return correoElectronico;
 	}
 
-	public void setCorreoElectronico(String correoElectronico) 
-	{
+	public void setCorreoElectronico(String correoElectronico) {
 		this.correoElectronico = correoElectronico;
 	}
     
-    //Método toString para imprimir la información del usuario
+    // Método toString para imprimir la información del usuario
 	@Override
-	public String toString()
-	{
-		SimpleDateFormat sdf = new SimpleDateFormat("dd/mm/yyyy");
-		return "Nombre: " + nombreApellidos +
-	               "\nFecha de Nacimiento: " + sdf.format(fechaNacimiento) +
-	               "\nFecha de Inscripción: " + sdf.format(fechaInscripcion) +
-	               "\nCorreo Electrónico: " + correoElectronico;
+	public String toString() {
+		SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+		return "ID: " + idJugador + 
+		       "\nNombre: " + nombreApellidos +
+		       "\nFecha de Nacimiento: " + sdf.format(fechaNacimiento) +
+		       "\nFecha de Inscripción: " + sdf.format(fechaInscripcion) +
+		       "\nCorreo Electrónico: " + correoElectronico;
 	}
 	
-	//Metodo calcularAntiguedad que indica cuantos años lleva registrado
-	public int calcularAntiguedad()
-	{
+	// Método calcularAntiguedad que indica cuántos años lleva registrado
+	public int calcularAntiguedad() {
+		if (fechaInscripcion == null) {
+			return 0; // Si no está inscrito, no tiene antigüedad
+		}
 		Calendar fechaActual = Calendar.getInstance();
 		Calendar fechaInscripcionCal = Calendar.getInstance();
 		fechaInscripcionCal.setTime(fechaInscripcion);
 		
 		int aniosAntiguedad = fechaActual.get(Calendar.YEAR) - fechaInscripcionCal.get(Calendar.YEAR);
 		
-		//Si aun no ha pasado a fecha de inscripcion en este año, restamos 1
-		if (fechaActual.get(Calendar.DAY_OF_YEAR) < fechaInscripcionCal.get(Calendar.DAY_OF_YEAR)) 
-		{
+		// Si aún no ha pasado la fecha de inscripción en este año, restamos 1
+		if (fechaActual.get(Calendar.DAY_OF_YEAR) < fechaInscripcionCal.get(Calendar.DAY_OF_YEAR)) {
             aniosAntiguedad--;
         }
 		

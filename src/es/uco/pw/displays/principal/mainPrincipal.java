@@ -5,6 +5,9 @@ import java.util.Scanner;
 import es.uco.pw.displays.jugadores.mainJugadores;
 import es.uco.pw.displays.pistas.mainPistas;
 import es.uco.pw.displays.reservas.mainReservas;
+import es.uco.pw.gestores.jugadores.GestorJugadores; // Importar GestorJugadores
+import es.uco.pw.gestores.reservas.GestorReservas;
+import es.uco.pw.gestores.pistas.GestorPistas;
 
 public class mainPrincipal {
 
@@ -15,37 +18,52 @@ public class mainPrincipal {
         System.out.println("1. Menú de Pistas");
         System.out.println("2. Menú de Reservas");
         System.out.println("3. Menú de Usuarios");
-        System.out.println("4. Salir del programa");
+        System.out.println("0. Salir del programa");
         System.out.println("=====================================");
         System.out.print("Seleccione una opción: ");
     }
 
     public static void main(String[] args) {
-        Scanner sc = new Scanner(System.in);  // Crear una sola instancia de Scanner
+        Scanner sc = new Scanner(System.in);
+        GestorJugadores gestorJugadores = GestorJugadores.getInstance(); // Obtener la instancia del gestor de jugadores
+        GestorReservas gestorReservas = GestorReservas.getInstance();
+        GestorPistas gestorPistas = GestorPistas.getInstance();
+  
+        // Cargar primero los jugadores
+        gestorJugadores.cargarJugadoresDesdeFichero();
+        // Luego, cargar las reservas
+        gestorReservas.cargarReservasDesdeFichero();
+    	gestorPistas.cargarPistasDesdeFichero();
+    	gestorPistas.cargarMaterialesDesdeFichero();
         int opcion;
         boolean continuar = true;
 
         while (continuar) {
             imprimirMenu(); // Mostrar el menú principal
-            opcion = sc.nextInt(); // Leer la opción del usuario
-            sc.nextLine(); // Limpiar el buffer después de leer enteros
+            opcion = sc.nextInt();
+            sc.nextLine();
 
             switch (opcion) {
                 case 1:
                     System.out.println("Accediendo al Menú de Pistas...");
-                    mainPistas.main(sc); // Pasar el Scanner al menú de Pistas
+                    mainPistas.main(sc);
                     break;
                 case 2:
                     System.out.println("Accediendo al Menú de Reservas...");
-                    mainReservas.main(sc); // Pasar el Scanner al menú de Reservas
+                    mainReservas.main(sc);
                     break;
                 case 3:
                     System.out.println("Accediendo al Menú de Usuarios...");
                     mainJugadores.main(sc); // Pasar el Scanner al menú de Usuarios
                     break;
-                case 4:
-                    System.out.println("Saliendo del programa. ¡Hasta pronto!");
+                case 0:
+                    System.out.println("Saliendo del programa. Guardando reservas y jugadores...");
                     continuar = false; // Romper el bucle para salir
+                    // Guardar las reservas y jugadores antes de salir
+                    gestorReservas.guardarReservasEnFichero();
+                    gestorJugadores.guardarJugadoresEnFichero(); // Guardar jugadores
+                    gestorPistas.guardarPistasEnFichero();
+                    gestorPistas.guardarMaterialesEnFichero();
                     break;
                 default:
                     System.out.println("Opción no válida. Por favor, intente nuevamente.");
@@ -54,4 +72,5 @@ public class mainPrincipal {
 
         sc.close(); // Cerrar el Scanner al final
     }
+
 }

@@ -1,1 +1,4 @@
 reservasFile=src/Ficheros/reservas.txt
+jugadoresFile=src/Ficheros/jugadores.txt
+materialesFile=src/Ficheros/materiales.txt
+pistasFile=src/Ficheros/pistas.txt

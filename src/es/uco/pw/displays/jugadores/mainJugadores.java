@@ -16,16 +16,15 @@ public class mainJugadores {
         System.out.println("1. Alta de Usuario");
         System.out.println("2. Modificar Usuario");
         System.out.println("3. Listar Usuarios");
-        System.out.println("4. Salir del programa");
+        System.out.println("0. Volver al menú principal");
         System.out.println("=====================================");
         System.out.print("Seleccione una opción: ");
     }
 
-    public static void main(String[] args) {
-        // Instancia del gestor de usuarios
-        GestorJugadores gestor = new GestorJugadores();
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
-        Scanner sc = new Scanner(System.in);
+    public static void main(Scanner sc) {
+        // Instancia del gestor de usuarios utilizando el patrón Singleton
+        GestorJugadores gestor = GestorJugadores.getInstance(); // Obtener la instancia única
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         int opcion;
 
         do {
@@ -34,45 +33,44 @@ public class mainJugadores {
             sc.nextLine(); // Limpiar el buffer después de leer enteros
 
             switch (opcion) {
-            	// Proceso de alta de jugador
-            	case 1:
-	                System.out.println("Iniciando proceso de alta de jugador...");
-	                try {
-	                    System.out.print("Ingrese nombre y apellidos: ");
-	                    String nombreApellidos = sc.nextLine();
-	
-	                    System.out.print("Ingrese fecha de nacimiento (dd/MM/yyyy): ");
-	                    String fechaNacimientoStr = sc.nextLine();
-	                    Date fechaNacimiento = dateFormat.parse(fechaNacimientoStr);
-	
-	                    System.out.print("Ingrese el correo electrónico: ");
-	                    String correo = sc.nextLine();
-	
-	                    // Crear un nuevo objeto Jugador con los datos introducidos
-	                    Jugador nuevoJugador = new Jugador();
-	                    nuevoJugador.setNombreApellidos(nombreApellidos);
-	                    nuevoJugador.setFechaNacimiento(fechaNacimiento);
-	                    nuevoJugador.setCorreoElectronico(correo);
-	                    sc.close();
-	
-	                    // Llamar al método altaJugador y verificar el resultado
-	                    boolean registroExitoso = gestor.altaJugador(nuevoJugador);
-	                    
-	                    if (registroExitoso) {
-	                        System.out.println("Jugador registrado con éxito.");
-	                    } else {
-	                        System.out.println("Error: el correo ya está registrado.");
-	                    }
-	
-	                } catch (ParseException e) {
-	                    System.out.println("Formato de fecha incorrecto. Intente nuevamente.");
-	                }
-	                break;
-	                
-	            // Modificar usuario
+                // Proceso de alta de jugador
+                case 1:
+                    System.out.println("Iniciando proceso de alta de jugador...");
+                    try {
+                        System.out.print("Ingrese nombre y apellidos: ");
+                        String nombreApellidos = sc.nextLine();
+
+                        System.out.print("Ingrese fecha de nacimiento (yyyy-MM-dd): ");
+                        String fechaNacimientoStr = sc.nextLine();
+                        Date fechaNacimiento = dateFormat.parse(fechaNacimientoStr);
+
+                        System.out.print("Ingrese el correo electrónico: ");
+                        String correo = sc.nextLine();
+
+                        // Crear un nuevo objeto Jugador con los datos introducidos
+                        Jugador nuevoJugador = new Jugador();
+                        nuevoJugador.setNombreApellidos(nombreApellidos);
+                        nuevoJugador.setFechaNacimiento(fechaNacimiento);
+                        nuevoJugador.setCorreoElectronico(correo);
+
+                        // Llamar al método altaJugador y verificar el resultado
+                        boolean registroExitoso = gestor.altaJugador(nuevoJugador);
+
+                        if (registroExitoso) {
+                            System.out.println("Jugador registrado con éxito.");
+                        } else {
+                            System.out.println("Error: el correo ya está registrado.");
+                        }
+
+                    } catch (ParseException e) {
+                        System.out.println("Formato de fecha incorrecto. Intente nuevamente.");
+                    }
+                    break;
+
+                // Modificar usuario
                 case 2:
                     System.out.println("Iniciando proceso de modificación de jugador...");
-                    
+
                     System.out.print("Ingrese el correo electrónico del jugador a modificar: ");
                     String correoModificar = sc.nextLine();
 
@@ -80,8 +78,8 @@ public class mainJugadores {
                     String nuevoNombre = sc.nextLine();
 
                     // Definir el formato para la fecha
-                    SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-                    System.out.print("Ingrese la nueva fecha de nacimiento (dd/MM/yyyy): ");
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                    System.out.print("Ingrese la nueva fecha de nacimiento (yyyy-MM-dd): ");
                     String nuevaFechaNacimientoStr = sc.nextLine();
                     java.util.Date nuevaFechaNacimiento = null;
                     try {
@@ -93,49 +91,45 @@ public class mainJugadores {
 
                     System.out.print("Ingrese el nuevo correo electrónico: ");
                     String nuevoCorreo = sc.nextLine();
-                    sc.close();
 
                     int resultadoModificacion = gestor.modificarJugador(correoModificar, nuevoNombre, nuevaFechaNacimiento, nuevoCorreo);
 
-                    switch (resultadoModificacion)
-                    {
-                    case 1: 
-                    	System.out.println("Modificación realizada con éxito.");
-                    	break;
-                    case 0:
-                    	System.out.println("Error: El correo electrónico ya está registrado.");
-                    	break;
-                    case -1:
-                    	System.out.println("Error: No se encontró el jugador.");
-                    	break;
+                    switch (resultadoModificacion) {
+                        case 1:
+                            System.out.println("Modificación realizada con éxito.");
+                            break;
+                        case 0:
+                            System.out.println("Error: El correo electrónico ya está registrado.");
+                            break;
+                        case -1:
+                            System.out.println("Error: No se encontró el jugador.");
+                            break;
                     }
-                    
+
+                    break;
+
                 // Listar usuarios registrados
                 case 3:
-                	sc.close(); // Cerramos el scanner porque no nos va a hacer falta
                     int vacia = gestor.listaVacia();
-                    if (vacia == 1) 
-                    {
+                    if (vacia == 1) {
                         System.out.println("La lista de jugadores está vacía.");
-                    } 
-                    else
-                    {
-                    	System.out.println("Listando jugadores: ");
-                    	gestor.listarJugadores();
+                    } else {
+                        System.out.println("Listando jugadores: ");
+                        System.out.println(gestor.listarJugadores()); // Imprime la lista de jugadores
                     }
                     break;
-                    
+
                 // Salir al menú principal
-                case 4: 
-                	sc.close(); // Cerramos el scanner porque no nos va a hacer falta
-                    System.out.println("Saliendo del programa...");
-                    return;
+                case 0:
+                    // Volver al menú principal
+                    System.out.println("Volviendo al menú principal...");
+                    break;
+
 
                 default:
                     System.out.println("Opción no válida. Por favor, intente nuevamente.");
                     break;
             }
-        } while (opcion != 4);
+        } while (opcion != 0);
     }
 }
-

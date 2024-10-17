@@ -1,16 +1,12 @@
 package es.uco.pw.displays.pistas;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 import es.uco.pw.classes.pista.Pista;
-import es.uco.pw.classes.material.Material;
+import es.uco.pw.classes.material.*;
 import es.uco.pw.classes.pista.TamanoPista;
-import es.uco.pw.classes.material.TipoMaterial;
-import es.uco.pw.classes.material.EstadoMaterial;
 import es.uco.pw.gestores.pistas.GestorPistas;
-
 
 public class mainPistas {
     public static void imprimirMenu() {
@@ -28,8 +24,8 @@ public class mainPistas {
     }
 
     public static void main(Scanner sc) {
-        GestorPistas gestor = new GestorPistas();  // Instancia del gestor de pistas
-
+        // Obtener la instancia Singleton del gestor de pistas
+        GestorPistas gestorPistas = GestorPistas.getInstance();
         int opcion;
       
         do {
@@ -52,7 +48,7 @@ public class mainPistas {
                             : tipoPista == 2 ? TamanoPista.ADULTOS : TamanoPista._3VS3;
                     System.out.print("Máximo número de jugadores: ");
                     int maxJugadores = sc.nextInt();
-                    gestor.crearPista(nombrePista, disponible, exterior, tamanio, maxJugadores);
+                    gestorPistas.crearPista(nombrePista, disponible, exterior, tamanio, maxJugadores);
                     System.out.println("Pista creada con éxito.");
                     break;
 
@@ -70,7 +66,7 @@ public class mainPistas {
                     int estadoMaterial = sc.nextInt();
                     EstadoMaterial estado = estadoMaterial == 1 ? EstadoMaterial.DISPONIBLE
                             : estadoMaterial == 2 ? EstadoMaterial.RESERVADO : EstadoMaterial.MAL_ESTADO;
-                    gestor.crearMaterial(idMaterial, tipo, usoExterior, estado);
+                    gestorPistas.crearMaterial(idMaterial, tipo, usoExterior, estado);
                     System.out.println("Material creado con éxito.");
                     break;
 
@@ -80,7 +76,7 @@ public class mainPistas {
                     String nombreAsociarPista = sc.nextLine();
                     System.out.print("ID del material a asociar: ");
                     int idMaterialAsociar = sc.nextInt();
-                    boolean resultado = gestor.asociarMaterialAPista(nombreAsociarPista, idMaterialAsociar);
+                    boolean resultado = gestorPistas.asociarMaterialAPista(nombreAsociarPista, idMaterialAsociar);
                     if (resultado) {
                         System.out.println("Material asociado con éxito.");
                     } else {
@@ -90,7 +86,7 @@ public class mainPistas {
 
                 case 4:
                     System.out.println("Listar pistas no disponibles:");
-                    List<Pista> pistasNoDisponibles = gestor.listarPistasNoDisponibles();
+                    List<Pista> pistasNoDisponibles = gestorPistas.listarPistasNoDisponibles();
                     if (pistasNoDisponibles.isEmpty()) {
                         System.out.println("No hay pistas no disponibles.");
                     } else {
@@ -108,7 +104,7 @@ public class mainPistas {
                     int tipoPistaBuscar = sc.nextInt();
                     TamanoPista tipoPistaEnum = tipoPistaBuscar == 1 ? TamanoPista.MINIBASKET
                             : tipoPistaBuscar == 2 ? TamanoPista.ADULTOS : TamanoPista._3VS3;
-                    List<Pista> pistasDisponibles = gestor.buscarPistasDisponibles(numJugadores, tipoPistaEnum);
+                    List<Pista> pistasDisponibles = gestorPistas.buscarPistasDisponibles(numJugadores, tipoPistaEnum);
                     if (pistasDisponibles.isEmpty()) {
                         System.out.println("No hay pistas disponibles.");
                     } else {
@@ -119,7 +115,7 @@ public class mainPistas {
                     break;
 
                 case 0:
-                	// Volver al menú principal
+                    // Volver al menú principal
                     System.out.println("Volviendo al menú principal...");
                     break;
 
@@ -128,7 +124,5 @@ public class mainPistas {
                     break;
             }
         } while (opcion != 0);
-
-        sc.close();
     }
 }

@@ -4,17 +4,15 @@ import java.util.Date;
 
 public class ReservaGeneralFactory {
 
-    public static Reserva crearReserva(String tipoReserva, String tipoUsuario, int idUsuario, Date fechaHora, int duracionMinutos, int idPista, int numeroAdultos, int numeroNinos, boolean tieneAntiguedad, Bono bono, int numeroSesion) {
-        ReservaBonoFactory factory;
+    public static Reserva crearReserva(String tipoUsuario, int idUsuario, Date fechaHora, int duracionMinutos, int idPista, int numeroAdultos, int numeroNinos, boolean tieneAntiguedad, Bono bono, int numeroSesion) {
+        ReservaFactory factory;
 
-        if (tipoReserva.equalsIgnoreCase("individual")) {
+        if (bono == null) {  // Si no hay bono, es una reserva individual
             factory = new ReservaIndividualFactory();
-        } else if (tipoReserva.equalsIgnoreCase("bono")) {
+            return factory.crearReserva(tipoUsuario, idUsuario, fechaHora, duracionMinutos, idPista, numeroAdultos, numeroNinos, tieneAntiguedad);
+        } else {  // Si hay bono, es una reserva de bono
             factory = new ReservaBonoFactory();
-        } else {
-            throw new IllegalArgumentException("Tipo de reserva no válido: " + tipoReserva);
+            return factory.crearReservaBono(tipoUsuario, idUsuario, fechaHora, duracionMinutos, idPista, numeroAdultos, numeroNinos, bono, numeroSesion);
         }
-
-        return factory.crearReserva(tipoUsuario, idUsuario, fechaHora, duracionMinutos, idPista, numeroAdultos, numeroNinos, tieneAntiguedad, bono, numeroSesion);
     }
 }

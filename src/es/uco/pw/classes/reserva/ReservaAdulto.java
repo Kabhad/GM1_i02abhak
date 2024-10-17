@@ -31,4 +31,9 @@ public class ReservaAdulto extends Reserva {
     public String toString() {
         return super.toString() + ", numeroAdultos=" + numeroAdultos + "]";
     }
+
+    public String toStringEspecifica() {
+        return "numeroAdultos=" + numeroAdultos;
+    }
+
 }

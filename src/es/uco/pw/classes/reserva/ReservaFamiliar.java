@@ -41,5 +41,11 @@ public class ReservaFamiliar extends Reserva {
     public String toString() {
         return super.toString() + ", numeroAdultos=" + numeroAdultos + ", numeroNinos=" + numeroNinos + "]";
     }
+    
+    public String toStringEspecifica() {
+        return "numeroAdultos=" + numeroAdultos + ", numeroNinos=" + numeroNinos;
+    }
+
+
 }
 

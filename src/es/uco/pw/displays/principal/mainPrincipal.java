@@ -33,8 +33,8 @@ public class mainPrincipal {
         gestorJugadores.cargarJugadoresDesdeFichero();
         // Luego, cargar las reservas
         gestorReservas.cargarReservasDesdeFichero();
-    	gestorPistas.cargarPistasDesdeFichero();
     	gestorPistas.cargarMaterialesDesdeFichero();
+        gestorPistas.cargarPistasDesdeFichero();
         int opcion;
         boolean continuar = true;
 

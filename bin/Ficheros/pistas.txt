@@ -1,2 +1,3 @@
-1,Pista1,true,true,ADULTOS,4
-2,Pista2,false,false,MINIBASKET,10
+1;Pista1;true;true;ADULTOS;4;106
+2;Pista2;false;false;MINIBASKET;10
+3;Pista3;true;false;MINIBASKET;5;101

@@ -52,7 +52,7 @@ public class GestorPistas {
         try (BufferedReader br = new BufferedReader(new FileReader(ficheroPistasPath))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
+                String[] datos = linea.split(";");
                 int idPista = Integer.parseInt(datos[0]);
                 String nombrePista = datos[1];
                 boolean disponible = Boolean.parseBoolean(datos[2]);
@@ -62,6 +62,21 @@ public class GestorPistas {
 
                 Pista pista = new Pista(nombrePista, disponible, exterior, tamanioPista, maxJugadores);
                 pista.setIdPista(idPista);  // Setear el ID directamente
+                
+                //cargar materiales asociados
+             // Modificación en cargarPistasDesdeFichero()
+                for (int i = 6; i < datos.length; i++) {
+                    int idMaterial = Integer.parseInt(datos[i]);
+                    Material material = buscarMaterialPorId(idMaterial);
+                    if (material != null) {
+                        pista.asociarMaterialAPista(material);
+                        System.out.println("Material asociado a pista " + pista.getNombrePista() + ": " + material); // Añadir esta línea
+                    } else {
+                        System.out.println("Material no encontrado con ID: " + idMaterial); // Añadir esta línea
+                    }
+                }
+
+                
                 pistas.add(pista);
             }
             System.out.println("Pistas cargadas desde el fichero " + ficheroPistasPath);
@@ -75,13 +90,25 @@ public class GestorPistas {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ficheroPistasPath))) {
             for (Pista pista : pistas) {
                 StringBuilder sb = new StringBuilder();
-                sb.append(pista.getIdPista()).append(",")
-                  .append(pista.getNombrePista()).append(",")
-                  .append(pista.isDisponible()).append(",")
-                  .append(pista.isExterior()).append(",")
-                  .append(pista.getPista().name()).append(",")
+                sb.append(pista.getIdPista()).append(";")
+                  .append(pista.getNombrePista()).append(";")
+                  .append(pista.isDisponible()).append(";")
+                  .append(pista.isExterior()).append(";")
+                  .append(pista.getPista().name()).append(";")
                   .append(pista.getMax_jugadores());
 
+
+                  List<Material> materiales = pista.getMateriales();
+                  if (!materiales.isEmpty()) {
+                      sb.append(";");
+                      for (int i = 0; i < materiales.size(); i++) {
+                          sb.append(materiales.get(i).getId());
+                          if (i < materiales.size() - 1) {
+                              sb.append(",");  // Separar por comas los IDs
+                          }
+                      }
+                  }
+                
                 bw.write(sb.toString());
                 bw.newLine();
             }
@@ -96,7 +123,7 @@ public class GestorPistas {
         try (BufferedReader br = new BufferedReader(new FileReader(ficheroMaterialesPath))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(",");
+                String[] datos = linea.split(";");
                 int idMaterial = Integer.parseInt(datos[0]);
                 TipoMaterial tipo = TipoMaterial.valueOf(datos[1]);
                 boolean usoExterior = Boolean.parseBoolean(datos[2]);
@@ -116,9 +143,9 @@ public class GestorPistas {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ficheroMaterialesPath))) {
             for (Material material : materiales) {
                 StringBuilder sb = new StringBuilder();
-                sb.append(material.getId()).append(",")
-                  .append(material.getTipo().name()).append(",")
-                  .append(material.isUsoExterior()).append(",")
+                sb.append(material.getId()).append(";")
+                  .append(material.getTipo().name()).append(";")
+                  .append(material.isUsoExterior()).append(";")
                   .append(material.getEstado().name());
 
                 bw.write(sb.toString());
@@ -222,18 +249,33 @@ public class GestorPistas {
     }
 
 
-    // Método para listar todas las pistas con sus detalles
+ // Método para listar todas las pistas con sus detalles
     public String listarPistas() {
         StringBuilder resultado = new StringBuilder();
         for (Pista pista : pistas) {
-            resultado.append("Nombre de la Pista: ").append(pista.getNombrePista()).append("\n")
+            resultado.append("ID: ").append(pista.getIdPista()).append("\n")
+                .append("Nombre Pista: ").append(pista.getNombrePista()).append("\n")
                 .append("Disponible: ").append(pista.isDisponible() ? "Sí" : "No").append("\n")
                 .append("Exterior: ").append(pista.isExterior() ? "Sí" : "No").append("\n")
-                .append("Tamaño de la Pista: ").append(pista.getPista().toString()).append("\n")
-                .append("Máximo de Jugadores: ").append(pista.getMax_jugadores()).append("\n")
-                .append("Materiales Disponibles: ").append(pista.getMateriales().toString()).append("\n")
-                .append("----------------------------------\n");
+                .append("Tamaño Pista: ").append(pista.getPista().toString()).append("\n")
+                .append("Max Jugadores: ").append(pista.getMax_jugadores()).append("\n")
+                .append("Materiales: ");
+            
+            // Comprobación de si la pista tiene materiales asociados
+            if (pista.getMateriales().isEmpty()) {
+                resultado.append("[]\n");
+            } else {
+                // Mostrar los IDs de los materiales asociados
+                List<Integer> idsMateriales = new ArrayList<>();
+                for (Material material : pista.getMateriales()) {
+                    idsMateriales.add(material.getId()); // Asegurarse de que se obtienen los IDs
+                }
+                resultado.append(idsMateriales).append("\n"); // Mostrar los IDs de materiales
+            }
+
+            resultado.append("----------------------------------\n");
         }
         return resultado.toString();
     }
 }
+

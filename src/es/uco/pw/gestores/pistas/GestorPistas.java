@@ -64,15 +64,21 @@ public class GestorPistas {
                 pista.setIdPista(idPista);  // Setear el ID directamente
                 
                 //cargar materiales asociados
-             // Modificación en cargarPistasDesdeFichero()
-                for (int i = 6; i < datos.length; i++) {
-                    int idMaterial = Integer.parseInt(datos[i]);
-                    Material material = buscarMaterialPorId(idMaterial);
-                    if (material != null) {
-                        pista.asociarMaterialAPista(material);
-                        System.out.println("Material asociado a pista " + pista.getNombrePista() + ": " + material); // Añadir esta línea
-                    } else {
-                        System.out.println("Material no encontrado con ID: " + idMaterial); // Añadir esta línea
+                // Modificación en cargarPistasDesdeFichero()
+                if (datos.length > 6 && !datos[6].isEmpty()) {
+                    String[] materialesIds = datos[6].split(",");  // Dividir por comas si hay más de un material
+                    for (String materialIdStr : materialesIds) {
+                        try {
+                            int idMaterial = Integer.parseInt(materialIdStr.trim());  // Eliminar espacios
+                            Material material = buscarMaterialPorId(idMaterial);
+                            if (material != null) {
+                                pista.asociarMaterialAPista(material);
+                            } else {
+                                System.out.println("Material no encontrado con ID: " + idMaterial);
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error al parsear el ID de material: " + materialIdStr);
+                        }
                     }
                 }
 
@@ -118,25 +124,40 @@ public class GestorPistas {
         }
     }
 
-    // Método para cargar los materiales desde un fichero
+ // Método para cargar los materiales desde un fichero
     public void cargarMaterialesDesdeFichero() {
         try (BufferedReader br = new BufferedReader(new FileReader(ficheroMaterialesPath))) {
             String linea;
             while ((linea = br.readLine()) != null) {
-                String[] datos = linea.split(";");
-                int idMaterial = Integer.parseInt(datos[0]);
-                TipoMaterial tipo = TipoMaterial.valueOf(datos[1]);
-                boolean usoExterior = Boolean.parseBoolean(datos[2]);
-                EstadoMaterial estado = EstadoMaterial.valueOf(datos[3]);
+                if (!linea.trim().isEmpty()) {  // Ignorar líneas vacías
+                    String[] datos = linea.split(";");
+                    
+                    // Verificar si hay suficientes datos en la línea
+                    if (datos.length >= 4) {
+                        try {
+                            int idMaterial = Integer.parseInt(datos[0].trim());
+                            TipoMaterial tipo = TipoMaterial.valueOf(datos[1].trim());
+                            boolean usoExterior = Boolean.parseBoolean(datos[2].trim());
+                            EstadoMaterial estado = EstadoMaterial.valueOf(datos[3].trim());
 
-                Material material = new Material(idMaterial, tipo, usoExterior, estado);
-                materiales.add(material);
+                            Material material = new Material(idMaterial, tipo, usoExterior, estado);
+                            materiales.add(material);
+                        } catch (NumberFormatException e) {
+                            System.out.println("Error al parsear material en la línea: " + linea);
+                            System.out.println(e.getMessage());
+                        }
+                    } else {
+                        System.out.println("Línea incompleta en el fichero de materiales: " + linea);
+                    }
+                }
             }
             System.out.println("Materiales cargados desde el fichero " + ficheroMaterialesPath);
         } catch (IOException e) {
             System.out.println("Error al cargar los materiales: " + e.getMessage());
         }
     }
+
+
 
     // Método para guardar los materiales en un fichero
     public void guardarMaterialesEnFichero() {

@@ -36,19 +36,21 @@ public class GestorPistas {
     }
 
     // Método para cargar la ruta de los ficheros desde properties.txt
-    private void cargarRutaFicheros() {
+    private String cargarRutaFicheros() {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream("src/Ficheros/properties.txt")) {
             properties.load(fis);
             this.ficheroPistasPath = properties.getProperty("pistasFile");
             this.ficheroMaterialesPath = properties.getProperty("materialesFile");
+            return "Rutas cargadas correctamente.";
         } catch (IOException e) {
-            System.out.println("Error al leer el fichero de propiedades: " + e.getMessage());
+            return "Error al leer el fichero de propiedades: " + e.getMessage();
         }
     }
 
     // Método para cargar las pistas desde un fichero
-    public void cargarPistasDesdeFichero() {
+    public String cargarPistasDesdeFichero() {
+    	StringBuilder resultado = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(ficheroPistasPath))) {
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -74,10 +76,10 @@ public class GestorPistas {
                             if (material != null) {
                                 pista.asociarMaterialAPista(material);
                             } else {
-                                System.out.println("Material no encontrado con ID: " + idMaterial);
+                                resultado.append("Material no encontrado con ID: ").append(idMaterial).append("\n");
                             }
                         } catch (NumberFormatException e) {
-                            System.out.println("Error al parsear el ID de material: " + materialIdStr);
+                        	resultado.append("Error al parsear el ID de material: ").append(materialIdStr).append("\n");
                         }
                     }
                 }
@@ -85,14 +87,15 @@ public class GestorPistas {
                 
                 pistas.add(pista);
             }
-            System.out.println("Pistas cargadas desde el fichero " + ficheroPistasPath);
+            resultado.append("Pistas cargadas desde el fichero ").append(ficheroPistasPath).append("\n");
         } catch (IOException e) {
-            System.out.println("Error al cargar las pistas: " + e.getMessage());
+        	return "Error al cargar las pistas: " + e.getMessage();
         }
+        return resultado.toString();
     }
 
     // Método para guardar las pistas en un fichero
-    public void guardarPistasEnFichero() {
+    public String guardarPistasEnFichero() {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ficheroPistasPath))) {
             for (Pista pista : pistas) {
                 StringBuilder sb = new StringBuilder();
@@ -118,14 +121,15 @@ public class GestorPistas {
                 bw.write(sb.toString());
                 bw.newLine();
             }
-            System.out.println("Pistas guardadas en el fichero " + ficheroPistasPath);
+            return "Pistas guardadas en el fichero " + ficheroPistasPath;
         } catch (IOException e) {
-            System.out.println("Error al guardar las pistas: " + e.getMessage());
+        	return "Error al guardar las pistas: " + e.getMessage();
         }
     }
 
  // Método para cargar los materiales desde un fichero
-    public void cargarMaterialesDesdeFichero() {
+    public String cargarMaterialesDesdeFichero() {
+    	StringBuilder resultado = new StringBuilder();
         try (BufferedReader br = new BufferedReader(new FileReader(ficheroMaterialesPath))) {
             String linea;
             while ((linea = br.readLine()) != null) {
@@ -143,24 +147,26 @@ public class GestorPistas {
                             Material material = new Material(idMaterial, tipo, usoExterior, estado);
                             materiales.add(material);
                         } catch (NumberFormatException e) {
-                            System.out.println("Error al parsear material en la línea: " + linea);
-                            System.out.println(e.getMessage());
+                        	resultado.append("Error al parsear material en la línea: ").append(linea).append("\n");
+                            resultado.append(e.getMessage()).append("\n");
                         }
                     } else {
-                        System.out.println("Línea incompleta en el fichero de materiales: " + linea);
+                    	resultado.append("Línea incompleta en el fichero de materiales: ").append(linea).append("\n");
                     }
                 }
             }
-            System.out.println("Materiales cargados desde el fichero " + ficheroMaterialesPath);
+            resultado.append("Materiales cargados desde el fichero ").append(ficheroMaterialesPath).append("\n");
         } catch (IOException e) {
-            System.out.println("Error al cargar los materiales: " + e.getMessage());
+        	return "Error al cargar los materiales: " + e.getMessage();
         }
+        return resultado.toString();
     }
 
 
 
     // Método para guardar los materiales en un fichero
-    public void guardarMaterialesEnFichero() {
+    public String guardarMaterialesEnFichero() {
+    	StringBuilder resultado = new StringBuilder();
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ficheroMaterialesPath))) {
             for (Material material : materiales) {
                 StringBuilder sb = new StringBuilder();
@@ -172,10 +178,11 @@ public class GestorPistas {
                 bw.write(sb.toString());
                 bw.newLine();
             }
-            System.out.println("Materiales guardados en el fichero " + ficheroMaterialesPath);
+            resultado.append("Materiales guardados en el fichero ").append(ficheroMaterialesPath).append("\n");
         } catch (IOException e) {
-            System.out.println("Error al guardar los materiales: " + e.getMessage());
+        	return "Error al guardar los materiales: " + e.getMessage();
         }
+        return resultado.toString();
     }
 
     // Método para crear una nueva pista y añadirla a la lista de pistas
@@ -191,40 +198,36 @@ public class GestorPistas {
     }
 
     // Método para asociar un material a una pista disponible
-    public boolean asociarMaterialAPista(String nombrePista, int idMaterial) {
+    public String asociarMaterialAPista(String nombrePista, int idMaterial) {
         Pista pistaSeleccionada = buscarPistaPorNombre(nombrePista);
         Material materialSeleccionado = buscarMaterialPorId(idMaterial);
 
         if (pistaSeleccionada == null) {
-            System.out.println("La pista no existe.");
-            return false;
+            return "La pista no existe.";
         }
 
         if (materialSeleccionado == null) {
-            System.out.println("El material no existe.");
-            return false;
+            return "El material no existe.";
         }
 
         if (!pistaSeleccionada.isDisponible()) {
-            System.out.println("La pista no está disponible.");
-            return false;
+            return "La pista no está disponible.";
         }
 
         if (materialSeleccionado.getEstado() != EstadoMaterial.DISPONIBLE) {
-            System.out.println("El material no está disponible (en mal estado o reservado).");
-            return false;
+            return "El material no está disponible (en mal estado o reservado).";
         }
 
         // Verificar si el material ya está asignado a otra pista
         for (Pista pista : pistas) {
             if (pista.getMateriales().contains(materialSeleccionado)) {
-                System.out.println("El material ya está asignado a otra pista.");
-                return false;
+                return "El material ya está asignado a otra pista.";
             }
         }
 
         // Asociar el material a la pista si cumple las restricciones
-        return pistaSeleccionada.asociarMaterialAPista(materialSeleccionado);
+        pistaSeleccionada.asociarMaterialAPista(materialSeleccionado);
+        return "Material asociado con éxito a la pista.";
     }
 
     // Método auxiliar para buscar una pista por su nombre

@@ -26,8 +26,11 @@ public class mainPistas {
     public static void main(Scanner sc) {
         // Obtener la instancia Singleton del gestor de pistas
         GestorPistas gestorPistas = GestorPistas.getInstance();
+        
+        
+        
         int opcion;
-      
+        
         do {
             imprimirMenu();
             opcion = sc.nextInt();
@@ -35,6 +38,7 @@ public class mainPistas {
 
             switch (opcion) {
                 case 1:
+                    // Crear nueva pista
                     System.out.println("Crear nueva pista");
                     System.out.print("Nombre de la pista: ");
                     String nombrePista = sc.nextLine();
@@ -50,9 +54,11 @@ public class mainPistas {
                     int maxJugadores = sc.nextInt();
                     gestorPistas.crearPista(nombrePista, disponible, exterior, tamanio, maxJugadores);
                     System.out.println("Pista creada con éxito.");
+              
                     break;
 
                 case 2:
+                    // Crear nuevo material
                     System.out.println("Crear nuevo material");
                     System.out.print("ID del material: ");
                     int idMaterial = sc.nextInt();
@@ -66,8 +72,10 @@ public class mainPistas {
                     int estadoMaterial = sc.nextInt();
                     EstadoMaterial estado = estadoMaterial == 1 ? EstadoMaterial.DISPONIBLE
                             : estadoMaterial == 2 ? EstadoMaterial.RESERVADO : EstadoMaterial.MAL_ESTADO;
+
                     gestorPistas.crearMaterial(idMaterial, tipo, usoExterior, estado);
                     System.out.println("Material creado con éxito.");
+                    
                     break;
 
                 case 3:
@@ -76,12 +84,11 @@ public class mainPistas {
                     String nombreAsociarPista = sc.nextLine();
                     System.out.print("ID del material a asociar: ");
                     int idMaterialAsociar = sc.nextInt();
-                    boolean resultado = gestorPistas.asociarMaterialAPista(nombreAsociarPista, idMaterialAsociar);
-                    if (resultado) {
-                        System.out.println("Material asociado con éxito.");
-                    } else {
-                        System.out.println("No se pudo asociar el material.");
-                    }
+                    String resultado = gestorPistas.asociarMaterialAPista(nombreAsociarPista, idMaterialAsociar);
+                    System.out.println(resultado);
+                    
+                    // Guardar los cambios al fichero después de asociar material a pista
+                    System.out.println(gestorPistas.guardarPistasEnFichero()); // Mostrar retorno de guardar pistas
                     break;
 
                 case 4:
@@ -115,7 +122,6 @@ public class mainPistas {
                     break;
 
                 case 0:
-                    // Volver al menú principal
                     System.out.println("Volviendo al menú principal...");
                     break;
 
@@ -126,3 +132,6 @@ public class mainPistas {
         } while (opcion != 0);
     }
 }
+
+
+

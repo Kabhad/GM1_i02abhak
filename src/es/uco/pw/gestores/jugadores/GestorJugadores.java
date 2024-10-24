@@ -135,8 +135,17 @@ public class GestorJugadores {
             return "Error al guardar los jugadores: " + e.getMessage();
         }
     }
+    
+	// Método para buscar un jugador por su correo electrónico
+	public Jugador buscarJugadorPorCorreo(String correoElectronico) {
+	    for (Jugador jugador : listaJugadores) {
+	        if (jugador.getCorreoElectronico().equalsIgnoreCase(correoElectronico)) {
+	            return jugador; // Jugador encontrado
+	        }
+	    }
+	    return null; // Jugador no encontrado
+	}
 
-    // Buscar un jugador por ID
     public Jugador buscarJugadorPorId(int idJugador) {
         for (Jugador jugador : listaJugadores) {
             if (jugador.getIdJugador() == idJugador) {

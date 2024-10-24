@@ -16,7 +16,16 @@ public class ReservaIndividual extends Reserva {
         return reservaEspecifica;
     }
 
-    // Método toString modificado para mostrar el tipo de reserva específica@Override
+    // Aplicar descuento a la reserva individual y a la específica
+    @Override
+    public void setDescuento(float descuento) {
+        super.setDescuento(descuento);  // Aplica descuento a la reserva principal
+        if (this.reservaEspecifica != null) {
+            this.reservaEspecifica.setDescuento(descuento);  // Aplica el descuento a la reserva específica
+        }
+    }
+
+    // Método toString modificado para mostrar el tipo de reserva específica
     @Override
     public String toString() {
         String detallesEspecificos = "";
@@ -33,4 +42,3 @@ public class ReservaIndividual extends Reserva {
                ", reservaEspecifica=" + detallesEspecificos + "]";
     }
 }
-

@@ -1,8 +1,6 @@
 package es.uco.pw.classes.reserva;
 
 import java.util.Date;
-import es.uco.pw.gestores.jugadores.GestorJugadores;
-import es.uco.pw.classes.jugador.Jugador;
 
 public class ReservaBonoFactory extends ReservaFactory {
 
@@ -28,14 +26,8 @@ public class ReservaBonoFactory extends ReservaFactory {
             default:
                 throw new IllegalArgumentException("Tipo de usuario no válido: " + tipoUsuario);
         }
-
-        // Verificar si el jugador tiene más de 2 años de antigüedad
-        GestorJugadores gestorJugadores = GestorJugadores.getInstance();
-        Jugador jugador = gestorJugadores.buscarJugadorPorId(idUsuario);
-
-        if (jugador != null && jugador.calcularAntiguedad() >= 2) {
-            reservaEspecifica.setDescuento(0.10f);  // Aplica el 10% de descuento si tiene más de 2 años de antigüedad
-        }        
+        
+        reservaEspecifica.setDescuento(0.05f);  // Sincroniza el descuento en la reserva específica
 
         // Crear la reserva de bono con la reserva específica
         return new ReservaBono(idUsuario, fechaHora, duracionMinutos, idPista, bono, numeroSesion, reservaEspecifica);

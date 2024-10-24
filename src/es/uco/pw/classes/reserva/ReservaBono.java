@@ -102,6 +102,18 @@ public class ReservaBono extends Reserva {
     public void setBono(Bono bono) {
         this.bono = bono;
     }
+    
+    public boolean estaConfirmada() {
+        return confirmada;
+    }
+    
+    @Override
+    public void setDescuento(float descuento) {
+        super.setDescuento(descuento);
+        if (reservaEspecifica != null) {
+            reservaEspecifica.setDescuento(descuento); // Aplicar descuento también a la reserva específica
+        }
+    }
 
     // Método para consumir una sesión del bono
     public void consumirSesion() {

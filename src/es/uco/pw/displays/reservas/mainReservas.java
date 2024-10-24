@@ -1,7 +1,9 @@
 package es.uco.pw.displays.reservas;
 
 import es.uco.pw.classes.reserva.Bono;
+import es.uco.pw.classes.reserva.ReservaIndividual;
 import es.uco.pw.classes.reserva.Reserva;
+import es.uco.pw.classes.reserva.ReservaBono;
 import es.uco.pw.gestores.reservas.GestorReservas;
 import es.uco.pw.classes.jugador.Jugador;
 import es.uco.pw.classes.pista.Pista;
@@ -45,7 +47,6 @@ public class mainReservas {
                     // Hacer una reserva individual
                     System.out.println("Iniciando proceso para hacer una reserva individual...");
                     try {
-                        // Búsqueda de jugador por correo
                         System.out.print("Ingrese el correo del usuario: ");
                         String correo = sc.nextLine();
                         Jugador jugador = gestorReservas.buscarJugadorPorCorreo(correo);
@@ -54,7 +55,6 @@ public class mainReservas {
                             break;
                         }
 
-                        // Mostrar pistas disponibles
                         List<Pista> pistasDisponibles = gestorReservas.listarPistasDisponibles();
                         if (pistasDisponibles.isEmpty()) {
                             System.out.println("No hay pistas disponibles.");
@@ -90,7 +90,12 @@ public class mainReservas {
                         int numeroNinos = sc.nextInt();
                         sc.nextLine(); // Limpiar buffer
 
-                        gestorReservas.hacerReservaIndividual(jugador, fechaHora, duracionMinutos, pista, numeroAdultos, numeroNinos);
+                        try {
+                            gestorReservas.hacerReservaIndividual(jugador, fechaHora, duracionMinutos, pista, numeroAdultos, numeroNinos);
+                            System.out.println("Reserva individual creada correctamente.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error al crear la reserva: " + e.getMessage());
+                        }
                     } catch (ParseException e) {
                         System.out.println("Formato de fecha incorrecto.");
                     }
@@ -108,7 +113,6 @@ public class mainReservas {
                             break;
                         }
 
-                        // Mostrar pistas disponibles
                         List<Pista> pistasDisponiblesBono = gestorReservas.listarPistasDisponibles();
                         if (pistasDisponiblesBono.isEmpty()) {
                             System.out.println("No hay pistas disponibles.");
@@ -152,7 +156,13 @@ public class mainReservas {
                         int numeroSesion = sc.nextInt();
                         sc.nextLine(); // Limpiar buffer
                         Bono bono = new Bono(idBono, jugadorBono.getIdJugador(), numeroSesion, fechaHoraBono);
-                        gestorReservas.hacerReservaBono(jugadorBono, fechaHoraBono, duracionMinutosBono, pistaBono, numeroAdultosBono, numeroNinosBono, bono, numeroSesion);
+
+                        try {
+                            gestorReservas.hacerReservaBono(jugadorBono, fechaHoraBono, duracionMinutosBono, pistaBono, numeroAdultosBono, numeroNinosBono, bono, numeroSesion);
+                            System.out.println("Reserva de bono creada correctamente.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error al crear la reserva de bono: " + e.getMessage());
+                        }
                     } catch (ParseException e) {
                         System.out.println("Formato de fecha incorrecto.");
                     }
@@ -173,7 +183,9 @@ public class mainReservas {
                         System.out.print("Ingrese ID de la pista: ");
                         int idPistaModificacion = sc.nextInt();
                         sc.nextLine(); // Limpiar buffer
-                        Pista pistaModificacion = gestorReservas.listarPistasDisponibles().stream().filter(p -> p.getIdPista() == idPistaModificacion).findFirst().orElse(null);
+                        Pista pistaModificacion = gestorReservas.listarPistasDisponibles().stream()
+                            .filter(p -> p.getIdPista() == idPistaModificacion)
+                            .findFirst().orElse(null);
                         if (pistaModificacion == null) {
                             System.out.println("Pista no válida.");
                             break;
@@ -181,6 +193,12 @@ public class mainReservas {
 
                         System.out.print("Ingrese fecha y hora originales (yyyy-MM-dd HH:mm): ");
                         Date fechaHoraModificacion = dateFormat.parse(sc.nextLine());
+
+                        Reserva reserva = gestorReservas.encontrarReserva(jugadorModificacion.getIdJugador(), pistaModificacion.getIdPista(), fechaHoraModificacion);
+                        if (reserva == null) {
+                            System.out.println("Reserva no encontrada.");
+                            break;
+                        }
 
                         System.out.print("Ingrese nueva fecha y hora (yyyy-MM-dd HH:mm): ");
                         Date nuevaFechaHora = dateFormat.parse(sc.nextLine());
@@ -197,7 +215,22 @@ public class mainReservas {
                         int nuevosNinos = sc.nextInt();
                         sc.nextLine(); // Limpiar buffer
 
-                        gestorReservas.modificarReserva(jugadorModificacion, pistaModificacion, fechaHoraModificacion, nuevaFechaHora, nuevaDuracion, nuevosAdultos, nuevosNinos);
+                        Bono bono = null;
+                        int numeroSesion = 0;
+
+                        if (reserva instanceof ReservaBono) {
+                            bono = ((ReservaBono) reserva).getBono();
+                            numeroSesion = ((ReservaBono) reserva).getNumeroSesion();
+                        }
+
+                        try {
+                            gestorReservas.modificarReserva(
+                                reserva, pistaModificacion, fechaHoraModificacion, nuevaFechaHora, nuevaDuracion, nuevosAdultos, nuevosNinos, bono, numeroSesion
+                            );
+                            System.out.println("Reserva modificada exitosamente.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error al modificar la reserva: " + e.getMessage());
+                        }
                     } catch (ParseException e) {
                         System.out.println("Formato de fecha incorrecto.");
                     }
@@ -222,21 +255,67 @@ public class mainReservas {
                         System.out.print("Ingrese fecha y hora de la reserva (yyyy-MM-dd HH:mm): ");
                         Date fechaHoraCancelacion = dateFormat.parse(sc.nextLine());
 
-                        gestorReservas.cancelarReserva(jugadorCancelacion, gestorReservas.listarPistasDisponibles().stream().filter(p -> p.getIdPista() == idPistaCancelacion).findFirst().orElse(null), fechaHoraCancelacion);
+                        try {
+                            gestorReservas.cancelarReserva(jugadorCancelacion, gestorReservas.listarPistasDisponibles().stream().filter(p -> p.getIdPista() == idPistaCancelacion).findFirst().orElse(null), fechaHoraCancelacion);
+                            System.out.println("Reserva cancelada exitosamente.");
+                        } catch (IllegalArgumentException e) {
+                            System.out.println("Error al cancelar la reserva: " + e.getMessage());
+                        }
                     } catch (ParseException e) {
                         System.out.println("Formato de fecha incorrecto.");
                     }
                     break;
 
                 case 5:
-                    // Consultar reservas futuras
+                    // No se hacen cambios en este case según tus indicaciones.
                     System.out.println("Consultando reservas futuras...");
                     List<Reserva> reservasFuturas = gestorReservas.consultarReservasFuturas();
+                    
                     if (reservasFuturas.isEmpty()) {
                         System.out.println("No hay reservas futuras.");
                     } else {
                         for (Reserva reserva : reservasFuturas) {
-                            System.out.println(reserva);
+                            if (reserva instanceof ReservaBono) {
+                                ReservaBono reservaBono = (ReservaBono) reserva;
+                                System.out.println("Reserva de Bono:");
+                                System.out.println("  ID Usuario: " + reservaBono.getIdUsuario());
+                                System.out.println("  Fecha y Hora: " + reservaBono.getFechaHora());
+                                System.out.println("  Pista: " + reservaBono.getIdPista());
+                                System.out.println("  Duración: " + reservaBono.getDuracionMinutos() + " minutos");
+                                System.out.println("  Bono ID: " + reservaBono.getIdBono());
+                                System.out.println("  Sesión número: " + reservaBono.getNumeroSesion());
+                                System.out.println("  Sesiones restantes: " + reservaBono.getBono().getSesionesRestantes());
+
+                                Reserva reservaEspecifica = reservaBono.getReservaEspecifica();
+                                if (reservaEspecifica != null) {
+                                    System.out.println("  Reserva Específica: " + reservaEspecifica.toString());
+                                    System.out.println("  Precio Específico: " + reservaEspecifica.getPrecio());
+                                    System.out.println("  Descuento aplicado: " + (reservaEspecifica.getDescuento() * 100) + "%");
+                                }
+
+                                System.out.println("  Precio Total: " + reservaEspecifica.getPrecio());
+                                System.out.println("  Descuento aplicado en Bono: " + (reservaEspecifica.getDescuento() * 100) + "%");
+                                System.out.println("------------------------------------");
+
+                            } else if (reserva instanceof ReservaIndividual) {
+                                ReservaIndividual reservaIndividual = (ReservaIndividual) reserva;
+                                System.out.println("Reserva Individual:");
+                                System.out.println("  ID Usuario: " + reservaIndividual.getIdUsuario());
+                                System.out.println("  Fecha y Hora: " + reservaIndividual.getFechaHora());
+                                System.out.println("  Pista: " + reservaIndividual.getIdPista());
+                                System.out.println("  Duración: " + reservaIndividual.getDuracionMinutos() + " minutos");
+
+                                Reserva reservaEspecifica = reservaIndividual.getReservaEspecifica();
+                                if (reservaEspecifica != null) {
+                                    System.out.println("  Reserva Específica: " + reservaEspecifica.toString());
+                                    System.out.println("  Precio Específico: " + reservaEspecifica.getPrecio());
+                                    System.out.println("  Descuento aplicado: " + (reservaEspecifica.getDescuento() * 100) + "%");
+                                }
+
+                                System.out.println("  Precio Total: " + reservaEspecifica.getPrecio());
+                                System.out.println("  Descuento aplicado en Individual: " + (reservaEspecifica.getDescuento() * 100) + "%");
+                                System.out.println("------------------------------------");
+                            }
                         }
                     }
                     break;
@@ -245,8 +324,10 @@ public class mainReservas {
                     // Consultar reservas por día y pista
                     System.out.println("Consultando reservas por día y pista...");
                     try {
+                        SimpleDateFormat formatoFecha = new SimpleDateFormat("yyyy-MM-dd");
+
                         System.out.print("Ingrese la fecha (yyyy-MM-dd): ");
-                        Date dia = dateFormat.parse(sc.nextLine());
+                        Date dia = formatoFecha.parse(sc.nextLine());
 
                         System.out.print("Ingrese ID de la pista: ");
                         int idPistaConsulta = sc.nextInt();

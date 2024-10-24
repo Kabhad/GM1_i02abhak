@@ -1,5 +1,7 @@
 package es.uco.pw.displays.principal;
 
+import java.io.IOException;
+import java.text.ParseException;
 import java.util.Scanner;
 
 import es.uco.pw.displays.jugadores.mainJugadores;
@@ -23,7 +25,7 @@ public class mainPrincipal {
         System.out.print("Seleccione una opción: ");
     }
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ParseException {
         Scanner sc = new Scanner(System.in);
         GestorJugadores gestorJugadores = GestorJugadores.getInstance(); // Obtener la instancia del gestor de jugadores
         GestorReservas gestorReservas = GestorReservas.getInstance();

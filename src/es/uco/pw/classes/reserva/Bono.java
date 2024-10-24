@@ -17,7 +17,7 @@ public class Bono {
     public Bono(int idBono, int idUsuario, int numeroSesion, Date fechaPrimeraReserva) {
         this.idBono = idBono;
         this.idUsuario = idUsuario;
-        this.sesionesRestantes = 6 - numeroSesion; // Calcular sesiones restantes
+        this.sesionesRestantes = 5 - numeroSesion; // Calcular sesiones restantes
         this.fechaCaducidad = calcularFechaCaducidad(fechaPrimeraReserva);
     }
 

@@ -21,18 +21,21 @@ public abstract class Reserva {
         this.fechaHora = fechaHora;
         this.duracionMinutos = duracionMinutos;
         this.idPista = idPista;
-        this.precio = calcularPrecio(duracionMinutos); // Calcula el precio automáticamente
+        this.precio = calcularPrecio(duracionMinutos, 0); // Calcula el precio automáticamente sin descuento inicialmente
         this.descuento = 0; // El descuento se aplicará después si es necesario
     }
     
-    // Cálculo de precios basado en la duración
-    private float calcularPrecio(int duracionMinutos) {
+    // Cálculo de precios basado en la duración, aplicando el descuento si existe
+    public static float calcularPrecio(int duracionMinutos, float descuento) {
+        float precioBase;
         switch (duracionMinutos) {
-            case 60: return 20.0f;
-            case 90: return 30.0f;
-            case 120: return 40.0f;
+            case 60: precioBase = 20.0f; break;
+            case 90: precioBase = 30.0f; break;
+            case 120: precioBase = 40.0f; break;
             default: throw new IllegalArgumentException("Duración no válida");
         }
+        // Aplica el descuento si existe
+        return precioBase * (1 - descuento);
     }
 
     // Métodos get y set para cada atributo
@@ -80,10 +83,12 @@ public abstract class Reserva {
         return descuento;
     }
 
+    // Setter de descuento que recalcula el precio
     public void setDescuento(float descuento) {
         this.descuento = descuento;
+        this.precio = calcularPrecio(this.duracionMinutos, descuento); // Recalcular el precio al aplicar descuento
     }
-
+    
     // Método toString para imprimir la información de la reserva
     @Override
     public String toString() {

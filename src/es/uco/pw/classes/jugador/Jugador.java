@@ -13,17 +13,15 @@ public class Jugador
     private Date fechaNacimiento;
     private Date fechaInscripcion;
     private String correoElectronico;
+    private boolean cuentaActiva = true; // Campo para indicar si la cuenta está activa
     
     // Constructor vacío (sin parámetros)
     public Jugador() 
     {
        this.idJugador = idCounter++; // Asignar un ID único y aumentar el contador
+       this.cuentaActiva = true; // La cuenta es activa por defecto
     }
     
-    public void setIdJugador(int idJugador) {
-		this.idJugador = idJugador;
-	}
-
 	// Constructor parametrizado (sin la fecha de inscripción)
     public Jugador(String nombreApellidos, Date fechaNacimiento, String correoElectronico) {
         this();
@@ -31,13 +29,25 @@ public class Jugador
         this.fechaNacimiento = fechaNacimiento;
         this.correoElectronico = correoElectronico;
     }
+    
 
-    // Métodos getter para el ID
+    // Métodos getter y setter 
 	public int getIdJugador() {
 		return idJugador;
 	}
+	
+    public void setIdJugador(int idJugador) {
+		this.idJugador = idJugador;
+	}
+    
+    public boolean isCuentaActiva() {
+        return cuentaActiva;
+    }
 
-    // Métodos getter y setter para los demás atributos
+    public void setCuentaActiva(boolean cuentaActiva) {
+        this.cuentaActiva = cuentaActiva;
+    }
+    
 	public String getNombreApellidos() {
 		return nombreApellidos;
 	}

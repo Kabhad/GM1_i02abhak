@@ -9,13 +9,14 @@ import es.uco.pw.classes.jugador.Jugador;
 import es.uco.pw.gestores.jugadores.GestorJugadores;
 
 public class mainJugadores {
-    public static void imprimirMenu() {
+	public static void imprimirMenu() {
         System.out.println("=====================================");
         System.out.println("      Bienvenido al Menú de Usuarios");
         System.out.println("=====================================");
         System.out.println("1. Alta de Usuario");
         System.out.println("2. Modificar Usuario");
         System.out.println("3. Listar Usuarios");
+        System.out.println("4. Baja de Usuario"); 
         System.out.println("0. Volver al menú principal");
         System.out.println("=====================================");
         System.out.print("Seleccione una opción: ");
@@ -89,7 +90,17 @@ public class mainJugadores {
                     String resultadoListado = gestor.listarJugadores();
                     System.out.println(resultadoListado);
                     break;
+                    
+                case 4: // Baja de jugador
+                	System.out.println("Iniciando proceso de baja de jugador...");
+                    System.out.print("Ingrese el correo electrónico del jugador a dar de baja: ");
+                    String correoBaja = sc.nextLine();
 
+                    // Llamar a la función de bajaJugador del gestor y mostrar el resultado
+                    String resultadoBaja = gestor.bajaJugador(correoBaja);
+                    System.out.println(resultadoBaja);
+                    break;
+                	
                 case 0: // Salir
                     System.out.println("Volviendo al menú principal...");
                     break;

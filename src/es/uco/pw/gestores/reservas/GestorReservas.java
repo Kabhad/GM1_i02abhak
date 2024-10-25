@@ -188,7 +188,11 @@ public class GestorReservas {
     }
 
     public void hacerReservaIndividual(Jugador jugador, Date fechaHora, int duracionMinutos, Pista pista, int numeroAdultos, int numeroNinos) {
-        String tipoReserva = determinarTipoReserva(numeroAdultos, numeroNinos);
+    	if (!jugador.isCuentaActiva()) {
+            throw new IllegalArgumentException("La cuenta del jugador no está activa.");
+        }
+    	
+    	String tipoReserva = determinarTipoReserva(numeroAdultos, numeroNinos);
         if (!cumpleCondicionesTipoReserva(pista, tipoReserva)) {
             throw new IllegalArgumentException("La pista seleccionada no es válida para el tipo de reserva '" + tipoReserva + "'.");
         }
@@ -212,7 +216,11 @@ public class GestorReservas {
     }
 
     public void hacerReservaBono(Jugador jugador, Date fechaHora, int duracionMinutos, Pista pista, int numeroAdultos, int numeroNinos, Bono bono, int numeroSesion) {
-        String tipoReserva = determinarTipoReserva(numeroAdultos, numeroNinos);
+    	if (!jugador.isCuentaActiva()) {
+            throw new IllegalArgumentException("La cuenta del jugador no está activa.");
+        }
+    	
+    	String tipoReserva = determinarTipoReserva(numeroAdultos, numeroNinos);
 
         if (!cumpleCondicionesTipoReserva(pista, tipoReserva)) {
             throw new IllegalArgumentException("La pista seleccionada no es válida para el tipo de reserva '" + tipoReserva + "'.");
@@ -290,7 +298,11 @@ public class GestorReservas {
     }
 
     public void cancelarReserva(Jugador jugador, Pista pista, Date fechaHora) {
-        Reserva reserva = encontrarReserva(jugador.getIdJugador(), pista.getIdPista(), fechaHora);
+    	if (!jugador.isCuentaActiva()) {
+            throw new IllegalArgumentException("La cuenta del jugador no está activa.");
+        }
+    	
+    	Reserva reserva = encontrarReserva(jugador.getIdJugador(), pista.getIdPista(), fechaHora);
 
         if (reserva == null) {
             throw new IllegalArgumentException("Reserva no encontrada.");

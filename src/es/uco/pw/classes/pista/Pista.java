@@ -4,9 +4,14 @@ import java.util.ArrayList;
 import java.util.List;
 import es.uco.pw.classes.material.*;
 
+/**
+ * Clase que representa una pista deportiva, la cual puede estar en interiores o exteriores y 
+ * tiene un tamaño y materiales asociados.
+ * Proporciona métodos para gestionar el estado y los materiales de la pista.
+ */
 public class Pista {
 
-	private static int idCounter = 1; // Contador estático para generar IDs únicos
+    private static int idCounter = 1; // Contador estático para generar IDs únicos
     private int idPista;
     private String nombrePista;
     private boolean disponible;
@@ -14,14 +19,24 @@ public class Pista {
     private TamanoPista pista;
     private int max_jugadores;
     private List<Material> materiales;
-    
-    // Constructor vacío
+
+    /**
+     * Constructor vacío que inicializa una pista con un ID único y una lista vacía de materiales.
+     */
     public Pista() {
         this.idPista = idCounter++; // Asignar un ID único
         this.materiales = new ArrayList<>();
     }
-    
-    // Constructor parametrizado
+
+    /**
+     * Constructor parametrizado para inicializar una pista con sus atributos.
+     *
+     * @param nombrePista Nombre de la pista.
+     * @param disponible  Estado de disponibilidad de la pista.
+     * @param exterior    Si la pista es exterior o no.
+     * @param pista       Tamaño de la pista.
+     * @param max_jugadores Número máximo de jugadores permitidos.
+     */
     public Pista(String nombrePista, boolean disponible, boolean exterior, TamanoPista pista, int max_jugadores) {
         this();
         this.nombrePista = nombrePista;
@@ -31,65 +46,137 @@ public class Pista {
         this.max_jugadores = max_jugadores;
     }
 
-    // Método getter para el ID
+    /**
+     * Obtiene el ID único de la pista.
+     *
+     * @return ID de la pista.
+     */
     public int getIdPista() {
         return idPista;
     }
-    
-    public void setIdPista(int idPista)
-    {
-    	this.idPista = idPista;
+
+    /**
+     * Establece el ID único de la pista.
+     *
+     * @param idPista ID a asignar.
+     */
+    public void setIdPista(int idPista) {
+        this.idPista = idPista;
     }
 
-    // Métodos getter y setter para los demás atributos
+    /**
+     * Obtiene el nombre de la pista.
+     *
+     * @return Nombre de la pista.
+     */
     public String getNombrePista() {
         return nombrePista;
     }
 
+    /**
+     * Establece el nombre de la pista.
+     *
+     * @param nombrePista Nombre a asignar.
+     */
     public void setNombrePista(String nombrePista) {
         this.nombrePista = nombrePista;
     }
 
+    /**
+     * Verifica si la pista está disponible.
+     *
+     * @return True si la pista está disponible, False en caso contrario.
+     */
     public boolean isDisponible() {
         return disponible;
     }
 
+    /**
+     * Establece el estado de disponibilidad de la pista.
+     *
+     * @param disponible Estado de disponibilidad a asignar.
+     */
     public void setDisponible(boolean disponible) {
         this.disponible = disponible;
     }
 
+    /**
+     * Verifica si la pista es exterior.
+     *
+     * @return True si la pista es exterior, False en caso contrario.
+     */
     public boolean isExterior() {
         return exterior;
     }
 
+    /**
+     * Establece si la pista es exterior.
+     *
+     * @param exterior Estado exterior a asignar.
+     */
     public void setExterior(boolean exterior) {
         this.exterior = exterior;
     }
 
+    /**
+     * Obtiene el tamaño de la pista.
+     *
+     * @return Tamaño de la pista.
+     */
     public TamanoPista getPista() {
         return pista;
     }
 
+    /**
+     * Establece el tamaño de la pista.
+     *
+     * @param pista Tamaño a asignar.
+     */
     public void setPista(TamanoPista pista) {
         this.pista = pista;
     }
 
+    /**
+     * Obtiene el número máximo de jugadores permitidos en la pista.
+     *
+     * @return Número máximo de jugadores.
+     */
     public int getMax_jugadores() {
         return max_jugadores;
     }
 
+    /**
+     * Establece el número máximo de jugadores permitidos en la pista.
+     *
+     * @param max_jugadores Número máximo de jugadores a asignar.
+     */
     public void setMax_jugadores(int max_jugadores) {
         this.max_jugadores = max_jugadores;
     }
 
+    /**
+     * Obtiene la lista de materiales asociados a la pista.
+     *
+     * @return Lista de materiales.
+     */
     public List<Material> getMateriales() {
         return materiales;
     }
 
+    /**
+     * Establece la lista de materiales asociados a la pista.
+     *
+     * @param materiales Lista de materiales a asignar.
+     */
     public void setMateriales(List<Material> materiales) {
         this.materiales = materiales;
     }
 
+    /**
+     * Representación en formato de texto de la pista, mostrando sus atributos.
+     *
+     * @return Cadena de texto con los atributos de la pista.
+     */
     @Override
     public String toString() {
         return "ID: " + idPista +
@@ -101,7 +188,11 @@ public class Pista {
                "\nMateriales: " + materiales;
     }
 
-    // Método para consultar materiales disponibles
+    /**
+     * Consulta y devuelve una lista de materiales disponibles en la pista.
+     *
+     * @return Lista de materiales disponibles.
+     */
     public List<Material> consultarMaterialesDisponibles() {
         List<Material> materialesDisponibles = new ArrayList<>();
         for (Material material : materiales) {
@@ -112,18 +203,18 @@ public class Pista {
         return materialesDisponibles;
     }
 
-    // Método para asociar un material a la pista
+    /**
+     * Asocia un material a la pista, si cumple las condiciones necesarias.
+     * 
+     * @param material Material a asociar a la pista.
+     * @return True si el material fue añadido exitosamente, False en caso contrario.
+     */
     public boolean asociarMaterialAPista(Material material) {
-        // Verificar si la pista es exterior
-        if (this.exterior) {
-            // Solo se permiten materiales para exterior
-            if (!material.isUsoExterior()) {
-                System.out.println("El material no puede ser utilizado en una pista exterior.");
-                return false;
-            }
+        if (this.exterior && !material.isUsoExterior()) {
+            System.out.println("El material no puede ser utilizado en una pista exterior.");
+            return false;
         }
 
-        // Verificar restricciones de cantidad de materiales
         int cantidadPelotas = 0;
         int cantidadCanastas = 0;
         int cantidadConos = 0;
@@ -144,7 +235,6 @@ public class Pista {
             }
         }
 
-        // Verificar cantidades máximas permitidas
         if (material.getTipo() == TipoMaterial.PELOTAS && cantidadPelotas >= 12) {
             System.out.println("No se pueden añadir más de 12 pelotas a la pista.");
             return false;
@@ -158,8 +248,8 @@ public class Pista {
             return false;
         }
 
-        // Si pasa todas las verificaciones, añadir el material a la pista
         materiales.add(material);
         return true; // Material añadido exitosamente
     }
 }
+

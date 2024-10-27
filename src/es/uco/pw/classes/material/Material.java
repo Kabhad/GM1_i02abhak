@@ -1,60 +1,117 @@
 package es.uco.pw.classes.material;
 
+/**
+ * Clase que representa un material que puede ser utilizado en las pistas.
+ */
 public class Material {
-	
-	private int id;
-	private TipoMaterial tipo;
-	private boolean usoExterior;
-	private EstadoMaterial estado;
-	
-	public Material() {
-		
-	}
-	
-	public Material(int id, TipoMaterial tipo, boolean usoExterior, EstadoMaterial estado) {
-		this.id = id;
-		this.tipo = tipo;
-		this.usoExterior = usoExterior;
-		this.estado = estado;
-	}
+    
+    private int id;                  // Identificador del material
+    private TipoMaterial tipo;       // Tipo de material
+    private boolean usoExterior;     // Indica si el material es apto para uso exterior
+    private EstadoMaterial estado;    // Estado actual del material
+    
+    /**
+     * Constructor por defecto.
+     */
+    public Material() {
+        
+    }
+    
+    /**
+     * Constructor que inicializa un material con los parámetros dados.
+     *
+     * @param id           Identificador del material.
+     * @param tipo        Tipo de material.
+     * @param usoExterior Indica si el material es apto para uso exterior.
+     * @param estado      Estado del material.
+     */
+    public Material(int id, TipoMaterial tipo, boolean usoExterior, EstadoMaterial estado) {
+        this.id = id;
+        this.tipo = tipo;
+        this.usoExterior = usoExterior;
+        this.estado = estado;
+    }
 
-	public int getId() {
-		return id;
-	}
+    /**
+     * Obtiene el identificador del material.
+     *
+     * @return El identificador del material.
+     */
+    public int getId() {
+        return id;
+    }
 
-	public void setId(int id) {
-		this.id = id;
-	}
+    /**
+     * Establece el identificador del material.
+     *
+     * @param id El nuevo identificador del material.
+     */
+    public void setId(int id) {
+        this.id = id;
+    }
 
-	public TipoMaterial getTipo() {
-		return tipo;
-	}
+    /**
+     * Obtiene el tipo de material.
+     *
+     * @return El tipo de material.
+     */
+    public TipoMaterial getTipo() {
+        return tipo;
+    }
 
-	public void setTipo(TipoMaterial tipo) {
-		this.tipo = tipo;
-	}
+    /**
+     * Establece el tipo de material.
+     *
+     * @param tipo El nuevo tipo de material.
+     */
+    public void setTipo(TipoMaterial tipo) {
+        this.tipo = tipo;
+    }
 
-	public boolean isUsoExterior() {
-		return usoExterior;
-	}
+    /**
+     * Indica si el material es apto para uso exterior.
+     *
+     * @return true si el material es para uso exterior; false en caso contrario.
+     */
+    public boolean isUsoExterior() {
+        return usoExterior;
+    }
 
-	public void setUsoExterior(boolean usoExterior) {
-		this.usoExterior = usoExterior;
-	}
+    /**
+     * Establece si el material es apto para uso exterior.
+     *
+     * @param usoExterior true si el material es para uso exterior; false en caso contrario.
+     */
+    public void setUsoExterior(boolean usoExterior) {
+        this.usoExterior = usoExterior;
+    }
 
-	public EstadoMaterial getEstado() {
-		return estado;
-	}
+    /**
+     * Obtiene el estado del material.
+     *
+     * @return El estado del material.
+     */
+    public EstadoMaterial getEstado() {
+        return estado;
+    }
 
-	public void setEstado(EstadoMaterial estado) {
-		this.estado = estado;
-	}
+    /**
+     * Establece el estado del material.
+     *
+     * @param estado El nuevo estado del material.
+     */
+    public void setEstado(EstadoMaterial estado) {
+        this.estado = estado;
+    }
 
-	@Override
-	public String toString() {
-		return "Material [id=" + id + ", tipo=" + tipo + ", usoExterior=" + usoExterior + ", estado=" + estado + "]";
-	}
-	
-	
-	
+    /**
+     * Devuelve una representación en forma de cadena del material.
+     *
+     * @return Una cadena que representa el material.
+     */
+    @Override
+    public String toString() {
+        return "Material [id=" + id + ", tipo=" + tipo + ", usoExterior=" + usoExterior + ", estado=" + estado + "]";
+    }
 }
+

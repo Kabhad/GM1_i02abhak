@@ -11,8 +11,14 @@ import es.uco.pw.gestores.jugadores.GestorJugadores; // Importar GestorJugadores
 import es.uco.pw.gestores.reservas.GestorReservas;
 import es.uco.pw.gestores.pistas.GestorPistas;
 
+/**
+ * Clase principal que gestiona la ejecución del sistema de gestión.
+ */
 public class mainPrincipal {
 
+    /**
+     * Imprime el menú principal del sistema.
+     */
     public static void imprimirMenu() {
         System.out.println("=====================================");
         System.out.println("      Bienvenido al Sistema de Gestión");
@@ -25,6 +31,13 @@ public class mainPrincipal {
         System.out.print("Seleccione una opción: ");
     }
 
+    /**
+     * Método principal que inicia la ejecución del programa.
+     *
+     * @param args Los argumentos de línea de comandos (no utilizados).
+     * @throws IOException    Si ocurre un error al cargar o guardar datos en los ficheros.
+     * @throws ParseException Si ocurre un error de análisis de datos.
+     */
     public static void main(String[] args) throws IOException, ParseException {
         Scanner sc = new Scanner(System.in);
         GestorJugadores gestorJugadores = GestorJugadores.getInstance(); // Obtener la instancia del gestor de jugadores
@@ -37,8 +50,8 @@ public class mainPrincipal {
         // Luego, cargar las reservas
         gestorReservas.cargarReservasDesdeFichero();
         // Cargar materiales
-    	gestorPistas.cargarMaterialesDesdeFichero();
-    	// Antes de cargar pistas
+        gestorPistas.cargarMaterialesDesdeFichero();
+        // Antes de cargar pistas
         gestorPistas.cargarPistasDesdeFichero();
         System.out.println("Datos cargados.");
         int opcion;
@@ -77,5 +90,5 @@ public class mainPrincipal {
 
         sc.close(); // Cerrar el Scanner al final
     }
-
 }
+

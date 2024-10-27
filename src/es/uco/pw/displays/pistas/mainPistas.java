@@ -8,8 +8,16 @@ import es.uco.pw.classes.material.*;
 import es.uco.pw.classes.pista.TamanoPista;
 import es.uco.pw.gestores.pistas.GestorPistas;
 
+/**
+ * Clase que representa el menú principal de gestión de pistas deportivas.
+ * Permite realizar acciones como crear pistas, crear materiales, asociar materiales a pistas, 
+ * listar pistas no disponibles y buscar pistas disponibles.
+ */
 public class mainPistas {
 
+    /**
+     * Imprime el menú principal en la consola con las opciones disponibles para el usuario.
+     */
     public static void imprimirMenu() {
         System.out.println("=====================================");
         System.out.println("        GESTOR DE PISTAS");
@@ -24,6 +32,11 @@ public class mainPistas {
         System.out.print("Seleccione una opción: ");
     }
 
+    /**
+     * Método principal para gestionar las opciones del menú.
+     *
+     * @param sc Objeto Scanner para la entrada de datos del usuario.
+     */
     public static void main(Scanner sc) {
         GestorPistas gestorPistas = GestorPistas.getInstance();
         int opcion;
@@ -137,3 +150,4 @@ public class mainPistas {
         } while (opcion != 0);
     }
 }
+

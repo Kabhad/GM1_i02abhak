@@ -31,12 +31,16 @@ public class mainPrincipal {
         GestorReservas gestorReservas = GestorReservas.getInstance();
         GestorPistas gestorPistas = GestorPistas.getInstance();
   
+        System.out.println("Cargando datos de ficheros en memoria...");
         // Cargar primero los jugadores
         gestorJugadores.cargarJugadoresDesdeFichero();
         // Luego, cargar las reservas
         gestorReservas.cargarReservasDesdeFichero();
+        // Cargar materiales
     	gestorPistas.cargarMaterialesDesdeFichero();
+    	// Antes de cargar pistas
         gestorPistas.cargarPistasDesdeFichero();
+        System.out.println("Datos cargados.");
         int opcion;
         boolean continuar = true;
 
@@ -59,11 +63,10 @@ public class mainPrincipal {
                     mainJugadores.main(sc); // Pasar el Scanner al menú de Usuarios
                     break;
                 case 0:
-                    System.out.println("Saliendo del programa. Guardando reservas y jugadores...");
+                    System.out.println("Saliendo del programa. Guardando datos en los ficheros...");
                     continuar = false; // Romper el bucle para salir
-                    // Guardar las reservas y jugadores antes de salir
                     gestorReservas.guardarReservasEnFichero();
-                    gestorJugadores.guardarJugadoresEnFichero(); // Guardar jugadores
+                    gestorJugadores.guardarJugadoresEnFichero();
                     gestorPistas.guardarPistasEnFichero();
                     gestorPistas.guardarMaterialesEnFichero();
                     break;

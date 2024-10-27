@@ -8,8 +8,17 @@ import java.util.Scanner;
 import es.uco.pw.classes.jugador.Jugador;
 import es.uco.pw.gestores.jugadores.GestorJugadores;
 
+/**
+ * Clase principal que implementa un menú de gestión de jugadores.
+ * Permite realizar operaciones como alta, modificación, baja y listado de jugadores
+ * mediante el uso de la clase GestorJugadores.
+ */
 public class mainJugadores {
-	public static void imprimirMenu() {
+    
+    /**
+     * Imprime el menú principal de opciones para la gestión de jugadores.
+     */
+    public static void imprimirMenu() {
         System.out.println("=====================================");
         System.out.println("      Bienvenido al Menú de Usuarios");
         System.out.println("=====================================");
@@ -22,6 +31,12 @@ public class mainJugadores {
         System.out.print("Seleccione una opción: ");
     }
 
+    /**
+     * Método principal que ejecuta el menú de gestión de jugadores.
+     * Las opciones incluyen alta, modificación, baja y listado de jugadores.
+     *
+     * @param sc El objeto Scanner utilizado para leer las entradas del usuario.
+     */
     public static void main(Scanner sc) {
         GestorJugadores gestor = GestorJugadores.getInstance(); // Singleton
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");

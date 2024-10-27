@@ -1,5 +1,5 @@
 1001;Juan Pérez;1990-05-15;2024-10-01;jperez@example.com;true
-1002;María Gómez;1985-12-30;2024-10-25;mgomez@example.com;true
+1002;María Gómez;1985-12-30;2021-10-25;mgomez@example.com;true
 1003;Carlos Sánchez;1992-03-25;2024-10-10;csanchez@example.com;true
 1004;Ana Martínez;1988-07-10;2024-10-12;amartinez@example.com;true
 1005;Pedro Fernández;1995-11-22;2024-10-15;pferandez@example.com;true

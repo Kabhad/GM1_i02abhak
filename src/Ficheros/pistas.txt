@@ -1,6 +1,7 @@
 1;Pista1;true;true;ADULTOS;4;106
 2;Pista2;false;false;MINIBASKET;10;201
-3;Pista3;true;false;MINIBASKET;5;101,204,205,318
+3;Pista3;true;false;MINIBASKET;5;101,204,205,318,304
 4;Pista4;false;false;_3VS3;6;313,319
 5;Pista5;false;true;ADULTOS;8
 6;Pista6;true;false;MINIBASKET;5;207
+7;Pista7;false;true;ADULTOS;6

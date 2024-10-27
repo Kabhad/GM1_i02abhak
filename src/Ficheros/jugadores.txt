@@ -11,5 +11,6 @@
 1011;Fernando Castro;1990-02-28;null;fcastro@example.com;true
 1012;Claudia Díaz;1992-10-21;null;cdiaz@example.com;false
 1013;Mario ElBro;2002-01-25;2024-10-25;pueseso@example.com;true
-1014;Angel Main;2000-02-21;null;angelmain@example.com;true
+1014;Angel Aranda;1990-10-10;null;aaranda@example.com;true
 1015;Jose Martinez;1998-05-06;2024-10-27;jmartinez@example.com;false
+1016;Fernando Gomez;1990-08-30;2024-10-27;fgomez@example.com;false

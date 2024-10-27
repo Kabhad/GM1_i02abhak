@@ -2,21 +2,42 @@ package es.uco.pw.classes.reserva;
 
 import java.util.Date;
 
+/**
+ * La clase {@code ReservaIndividual} representa una reserva individual
+ * de baloncesto que puede contener una reserva específica, que puede ser
+ * de tipo infantil, adulto o familiar.
+ */
 public class ReservaIndividual extends Reserva {
     private Reserva reservaEspecifica; // Contendrá la reserva específica (infantil, adulto, familiar)
 
-    // Constructor que incluye la reserva específica
+    /**
+     * Constructor para crear una nueva reserva individual con una reserva específica.
+     *
+     * @param idUsuario        El ID del usuario que realiza la reserva.
+     * @param fechaHora        La fecha y hora de la reserva.
+     * @param duracionMinutos  La duración de la reserva en minutos.
+     * @param idPista         El ID de la pista que se está reservando.
+     * @param reservaEspecifica La reserva específica asociada (infantil, adulto, familiar).
+     */
     public ReservaIndividual(int idUsuario, Date fechaHora, int duracionMinutos, int idPista, Reserva reservaEspecifica) {
         super(idUsuario, fechaHora, duracionMinutos, idPista);
         this.reservaEspecifica = reservaEspecifica; // Guardar la reserva específica
     }
 
-    // Getter para la reserva específica
+    /**
+     * Obtiene la reserva específica asociada a esta reserva individual.
+     *
+     * @return La reserva específica (infantil, adulto, familiar).
+     */
     public Reserva getReservaEspecifica() {
         return reservaEspecifica;
     }
 
-    // Aplicar descuento a la reserva individual y a la específica
+    /**
+     * Aplica un descuento tanto a la reserva individual como a la reserva específica.
+     *
+     * @param descuento El porcentaje de descuento a aplicar.
+     */
     @Override
     public void setDescuento(float descuento) {
         super.setDescuento(descuento);  // Aplica descuento a la reserva principal
@@ -25,7 +46,12 @@ public class ReservaIndividual extends Reserva {
         }
     }
 
-    // Método toString modificado para mostrar el tipo de reserva específica
+    /**
+     * Devuelve una representación en cadena de la reserva individual,
+     * incluyendo detalles de la reserva específica.
+     *
+     * @return Una cadena que representa la reserva individual.
+     */
     @Override
     public String toString() {
         String detallesEspecificos = "";

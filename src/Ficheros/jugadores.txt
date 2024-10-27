@@ -12,3 +12,4 @@
 1012;Claudia Díaz;1992-10-21;null;cdiaz@example.com;false
 1013;Mario ElBro;2002-01-25;2024-10-25;pueseso@example.com;true
 1014;Angel Main;2000-02-21;null;angelmain@example.com;true
+1015;Jose Martinez;1998-05-06;2024-10-27;jmartinez@example.com;false

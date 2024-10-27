@@ -17,6 +17,10 @@ import java.util.stream.Collectors;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 
+/**
+ * Clase que gestiona las reservas de pistas de baloncesto, incluyendo la carga y
+ * almacenamiento de reservas en ficheros, así como la gestión de jugadores y pistas.
+ */
 public class GestorReservas {
     private List<Reserva> reservas;
     private Map<String, Jugador> jugadores;
@@ -24,7 +28,10 @@ public class GestorReservas {
     private static GestorReservas instancia;
     private String ficheroReservasPath;
 
-    // Constructor privado para evitar instanciación directa
+    /**
+     * Constructor privado para evitar instanciación directa.
+     * Inicializa las listas y carga la ruta del fichero de reservas.
+     */
     private GestorReservas() {
         this.reservas = new ArrayList<>();
         this.jugadores = new HashMap<>();
@@ -32,7 +39,11 @@ public class GestorReservas {
         this.cargarRutaFicheros();  // Cargar la ruta del fichero desde properties.txt
     }
 
-    // Método estático para obtener la única instancia del gestor
+    /**
+     * Método estático para obtener la única instancia del gestor.
+     * 
+     * @return La instancia única de GestorReservas.
+     */
     public static synchronized GestorReservas getInstance() {
         if (instancia == null) {
             instancia = new GestorReservas();
@@ -40,7 +51,9 @@ public class GestorReservas {
         return instancia;
     }
 
-    // Método para cargar la ruta del fichero desde properties.txt
+    /**
+     * Método para cargar la ruta del fichero desde properties.txt.
+     */
     private void cargarRutaFicheros() {
         Properties properties = new Properties();
         try (FileInputStream fis = new FileInputStream("src/Ficheros/properties.txt")) {
@@ -51,7 +64,12 @@ public class GestorReservas {
         }
     }
     
-    // Método para cargar las reservas desde un fichero CSV
+    /**
+     * Carga las reservas desde un fichero CSV y las almacena en la lista de reservas.
+     * 
+     * @throws IOException Si ocurre un error al leer el fichero.
+     * @throws ParseException Si ocurre un error al parsear las fechas.
+     */
     public void cargarReservasDesdeFichero() throws IOException, ParseException {
         try (BufferedReader br = new BufferedReader(new FileReader(ficheroReservasPath))) {
             String linea;
@@ -108,7 +126,11 @@ public class GestorReservas {
         } 
     }
 
-    // Método para guardar las reservas en un fichero CSV
+    /**
+     * Guarda las reservas en un fichero CSV.
+     * 
+     * @throws IOException Si ocurre un error al escribir el fichero.
+     */
     public void guardarReservasEnFichero() throws IOException {
         try (BufferedWriter bw = new BufferedWriter(new FileWriter(ficheroReservasPath))) {
             for (Reserva reserva : reservas) {
@@ -175,18 +197,45 @@ public class GestorReservas {
         } 
     }
 
+    /**
+     * Busca un jugador por su ID.
+     * 
+     * @param idJugador El ID del jugador a buscar.
+     * @return El jugador encontrado o null si no se encuentra.
+     */
     public static Jugador buscarJugadorPorId(int idJugador) {
         return GestorJugadores.getInstance().buscarJugadorPorId(idJugador);
     }
 
+    /**
+     * Registra un nuevo jugador en el gestor de reservas.
+     * 
+     * @param jugador El jugador a registrar.
+     */
     public void registrarJugador(Jugador jugador) {
         jugadores.put(jugador.getCorreoElectronico(), jugador);
     }
 
+    /**
+     * Registra una nueva pista en el gestor de reservas.
+     * 
+     * @param pista La pista a registrar.
+     */
     public void registrarPista(Pista pista) {
         pistas.put(pista.getIdPista(), pista);
     }
 
+    /**
+     * Realiza una reserva individual para un jugador.
+     * 
+     * @param jugador El jugador que realiza la reserva.
+     * @param fechaHora La fecha y hora de la reserva.
+     * @param duracionMinutos La duración de la reserva en minutos.
+     * @param pista La pista a reservar.
+     * @param numeroAdultos El número de adultos en la reserva.
+     * @param numeroNinos El número de niños en la reserva.
+     * @throws IllegalArgumentException Si la cuenta del jugador no es válida.
+     */
     public void hacerReservaIndividual(Jugador jugador, Date fechaHora, int duracionMinutos, Pista pista, int numeroAdultos, int numeroNinos) {
     	if (!jugador.isCuentaActiva()) {
             throw new IllegalArgumentException("La cuenta del jugador no está activa.");
@@ -215,6 +264,19 @@ public class GestorReservas {
         this.reservas.add(reserva);
     }
 
+    /**
+     * Realiza una reserva utilizando un bono para un jugador.
+     *
+     * @param jugador El jugador que realiza la reserva.
+     * @param fechaHora La fecha y hora de la reserva.
+     * @param duracionMinutos La duración de la reserva en minutos.
+     * @param pista La pista a reservar.
+     * @param numeroAdultos El número de adultos en la reserva.
+     * @param numeroNinos El número de niños en la reserva.
+     * @param bono El bono a utilizar en la reserva.
+     * @param numeroSesion El número de la sesión del bono.
+     * @throws IllegalArgumentException Si la cuenta del jugador no está activa o si la pista no es válida para el tipo de reserva.
+     */
     public void hacerReservaBono(Jugador jugador, Date fechaHora, int duracionMinutos, Pista pista, int numeroAdultos, int numeroNinos, Bono bono, int numeroSesion) {
     	if (!jugador.isCuentaActiva()) {
             throw new IllegalArgumentException("La cuenta del jugador no está activa.");
@@ -242,6 +304,20 @@ public class GestorReservas {
         this.reservas.add(reserva);
     }
 
+    /**
+     * Modifica una reserva existente.
+     *
+     * @param reserva La reserva a modificar.
+     * @param pista La nueva pista para la reserva.
+     * @param fechaHoraOriginal La fecha y hora original de la reserva.
+     * @param nuevaFechaHora La nueva fecha y hora de la reserva.
+     * @param nuevaDuracionMinutos La nueva duración de la reserva en minutos.
+     * @param numeroAdultos El nuevo número de adultos en la reserva.
+     * @param numeroNinos El nuevo número de niños en la reserva.
+     * @param bono El bono a utilizar en la nueva reserva, si aplica.
+     * @param numeroSesion El número de la sesión del bono, si aplica.
+     * @throws IllegalArgumentException Si no se encuentra el jugador o la pista, si no se puede modificar la reserva, o si la pista no es válida.
+     */
     public void modificarReserva(Reserva reserva, Pista pista, Date fechaHoraOriginal, Date nuevaFechaHora, int nuevaDuracionMinutos, int numeroAdultos, int numeroNinos, Bono bono, int numeroSesion) {
         GestorJugadores gestorJugadores = GestorJugadores.getInstance();
         GestorPistas gestorPistas = GestorPistas.getInstance();
@@ -297,6 +373,14 @@ public class GestorReservas {
         this.reservas.add(nuevaReserva);
     }
 
+    /**
+     * Cancela una reserva existente.
+     *
+     * @param jugador El jugador que cancela la reserva.
+     * @param pista La pista de la reserva a cancelar.
+     * @param fechaHora La fecha y hora de la reserva a cancelar.
+     * @throws IllegalArgumentException Si la cuenta del jugador no está activa, si no se encuentra la reserva, o si no se puede cancelar la reserva.
+     */
     public void cancelarReserva(Jugador jugador, Pista pista, Date fechaHora) {
     	if (!jugador.isCuentaActiva()) {
             throw new IllegalArgumentException("La cuenta del jugador no está activa.");
@@ -315,6 +399,11 @@ public class GestorReservas {
         this.reservas.remove(reserva);
     }
 
+    /**
+     * Consulta las reservas futuras.
+     *
+     * @return Una lista de reservas futuras.
+     */
     public List<Reserva> consultarReservasFuturas() {
         Date fechaActual = new Date();
         return this.reservas.stream()
@@ -322,12 +411,27 @@ public class GestorReservas {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Consulta las reservas para un día específico y una pista específica.
+     *
+     * @param dia La fecha del día para consultar reservas.
+     * @param idPista El ID de la pista para consultar reservas.
+     * @return Una lista de reservas para el día y la pista especificados.
+     */
     public List<Reserva> consultarReservasPorDiaYPista(Date dia, int idPista) {
         return this.reservas.stream()
                 .filter(reserva -> esMismaFechaSinHora(reserva.getFechaHora(), dia) && reserva.getIdPista() == idPista)
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Encuentra una reserva por ID de usuario, ID de pista y fecha.
+     *
+     * @param idUsuario El ID del usuario que realizó la reserva.
+     * @param idPista El ID de la pista de la reserva.
+     * @param fechaHora La fecha y hora de la reserva.
+     * @return La reserva encontrada, o null si no se encuentra.
+     */
     public Reserva encontrarReserva(int idUsuario, int idPista, Date fechaHora) {
         for (Reserva reserva : reservas) {
             if (reserva.getIdUsuario() == idUsuario && 
@@ -339,6 +443,13 @@ public class GestorReservas {
         return null;
     }
 
+    /**
+     * Verifica si la pista cumple las condiciones para el tipo de reserva.
+     *
+     * @param pista La pista a verificar.
+     * @param tipoReserva El tipo de reserva a verificar.
+     * @return true si la pista cumple las condiciones; false en caso contrario.
+     */
     private boolean cumpleCondicionesTipoReserva(Pista pista, String tipoReserva) {
         switch (tipoReserva.toLowerCase()) {
             case "infantil":
@@ -352,6 +463,14 @@ public class GestorReservas {
         }
     }
 
+    /**
+     * Determina el tipo de reserva según el número de adultos y niños.
+     *
+     * @param numeroAdultos El número de adultos.
+     * @param numeroNinos El número de niños.
+     * @return El tipo de reserva (infantil, familiar o adulto).
+     * @throws IllegalArgumentException Si no se proporciona un número válido de adultos o niños.
+     */
     private String determinarTipoReserva(int numeroAdultos, int numeroNinos) {
         if (numeroAdultos > 0 && numeroNinos > 0) {
             return "familiar";
@@ -364,42 +483,91 @@ public class GestorReservas {
         }
     }
 
+    /**
+     * Busca un jugador por su correo electrónico.
+     *
+     * @param correoElectronico El correo electrónico del jugador.
+     * @return El jugador encontrado, o null si no se encuentra.
+     */
     public Jugador buscarJugadorPorCorreo(String correoElectronico) {
         return GestorJugadores.getInstance().buscarJugadorPorCorreo(correoElectronico);
     }
 
+    /**
+     * Lista las pistas disponibles.
+     *
+     * @return Una lista de pistas disponibles.
+     */
     public List<Pista> listarPistasDisponibles() {
         return GestorPistas.getInstance().buscarPistasDisponibles();
     }
 
+    /**
+     * Busca una pista por su ID.
+     *
+     * @param idPista El ID de la pista a buscar.
+     * @return La pista encontrada, o null si no se encuentra.
+     */
     public static Pista buscarPistaPorId(int idPista) {
         return GestorPistas.getInstance().buscarPistaPorId(idPista);
     }
 
+    /**
+     * Verifica si se puede modificar o cancelar una reserva.
+     *
+     * @param reserva La reserva a verificar.
+     * @return true si se puede modificar o cancelar; false en caso contrario.
+     */
     private boolean puedeModificarseOCancelarse(Reserva reserva) {
         long MILISEGUNDOS_EN_24_HORAS = 24 * 60 * 60 * 1000;
         long diferenciaTiempo = reserva.getFechaHora().getTime() - new Date().getTime();
         return diferenciaTiempo > MILISEGUNDOS_EN_24_HORAS;
     }
 
+    /**
+     * Verifica si dos fechas son del mismo día sin considerar la hora.
+     *
+     * @param fecha1 La primera fecha.
+     * @param fecha2 La segunda fecha.
+     * @return true si son el mismo día; false en caso contrario.
+     */
     private boolean esMismaFechaSinHora(Date fecha1, Date fecha2) {
         LocalDate localDate1 = convertirADia(fecha1);  
         LocalDate localDate2 = convertirADia(fecha2);
         return localDate1.equals(localDate2);  
     }
 
+    /**
+     * Convierte una fecha a un objeto LocalDate.
+     *
+     * @param fecha La fecha a convertir.
+     * @return El LocalDate correspondiente a la fecha.
+     */
     private LocalDate convertirADia(Date fecha) {
         return fecha.toInstant()
                     .atZone(ZoneId.systemDefault())
                     .toLocalDate();
     }
 
+    /**
+     * Verifica si dos fechas son iguales (incluyendo hora).
+     *
+     * @param fecha1 La primera fecha.
+     * @param fecha2 La segunda fecha.
+     * @return true si son iguales; false en caso contrario.
+     */
     private boolean esMismaFecha(Date fecha1, Date fecha2) {
         LocalDateTime localDateTime1 = convertirAFechaYHora(fecha1);
         LocalDateTime localDateTime2 = convertirAFechaYHora(fecha2);
         return localDateTime1.equals(localDateTime2);
     }
 
+    /**
+     * Convierte una fecha a un objeto LocalDateTime.
+     *
+     * @param fecha La fecha a convertir.
+     * @return El LocalDateTime correspondiente a la fecha.
+     */
     private LocalDateTime convertirAFechaYHora(Date fecha) {
         return fecha.toInstant()
                     .atZone(ZoneId.systemDefault())

@@ -2,12 +2,16 @@ package es.uco.pw.classes.reserva;
 
 import java.util.Date;
 
+/**
+ * Clase que representa una reserva familiar en el sistema.
+ * Extiende la clase abstracta Reserva, añadiendo atributos específicos para reservas familiares.
+ */
 public class ReservaFamiliar extends Reserva {
     // Atributos específicos de ReservaFamiliar
     private int numeroAdultos;
     private int numeroNinos;
 
-    // Constructor vacío, llama al constructor vacio de abstractReserva, clase padre
+    // Constructor vacío, llama al constructor vacío de Reserva, la clase padre
     public ReservaFamiliar() {
         super();
     }
@@ -42,10 +46,12 @@ public class ReservaFamiliar extends Reserva {
         return super.toString() + ", numeroAdultos=" + numeroAdultos + ", numeroNinos=" + numeroNinos + "]";
     }
     
+    /**
+     * Método que devuelve una representación específica de la reserva familiar.
+     *
+     * @return Una cadena con el número de adultos y niños en la reserva.
+     */
     public String toStringEspecifica() {
         return "numeroAdultos=" + numeroAdultos + ", numeroNinos=" + numeroNinos;
     }
-
-
 }
-

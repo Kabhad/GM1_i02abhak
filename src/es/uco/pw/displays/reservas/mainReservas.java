@@ -14,8 +14,17 @@ import java.util.Date;
 import java.util.List;
 import java.util.Scanner;
 
+
+/**
+ * Clase principal para gestionar reservas de pistas.
+ * Esta clase permite al usuario realizar reservas individuales y con bono, 
+ * así como modificar, cancelar y consultar reservas.
+ */
 public class mainReservas {
 
+	/**
+     * Imprime el menú principal del gestor de reservas.
+     */
     public static void imprimirMenu() {
         System.out.println("=====================================");
         System.out.println("        GESTOR DE RESERVAS");
@@ -31,6 +40,11 @@ public class mainReservas {
         System.out.print("Seleccione una opción: ");
     }
 
+    /**
+     * Método principal que inicia el gestor de reservas.
+     * 
+     * @param sc Scanner para la entrada del usuario.
+     */
     public static void main(Scanner sc) {
         GestorReservas gestorReservas = GestorReservas.getInstance();  // Obtener la instancia del gestor (Singleton)
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");

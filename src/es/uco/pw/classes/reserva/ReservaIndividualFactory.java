@@ -4,8 +4,27 @@ import java.util.Date;
 import es.uco.pw.gestores.jugadores.GestorJugadores;
 import es.uco.pw.classes.jugador.Jugador;
 
+/**
+ * La clase {@code ReservaIndividualFactory} es una fábrica que crea
+ * instancias de {@code ReservaIndividual} con reservas específicas
+ * basadas en el tipo de usuario (infantil, familiar, adulto).
+ */
 public class ReservaIndividualFactory extends ReservaFactory {
 
+    /**
+     * Crea una reserva individual basada en el tipo de usuario y otros parámetros.
+     *
+     * @param tipoUsuario       El tipo de usuario (infantil, familiar, adulto).
+     * @param idUsuario         El ID del usuario que realiza la reserva.
+     * @param fechaHora         La fecha y hora de la reserva.
+     * @param duracionMinutos   La duración de la reserva en minutos.
+     * @param idPista          El ID de la pista que se está reservando.
+     * @param numeroAdultos     El número de adultos en la reserva (si aplica).
+     * @param numeroNinos       El número de niños en la reserva (si aplica).
+     * @param tieneAntiguedad   Indica si el jugador tiene antigüedad para aplicar descuento.
+     * @return Una instancia de {@code ReservaIndividual} con la reserva específica creada.
+     * @throws IllegalArgumentException Si el tipo de usuario no es válido.
+     */
     @Override
     public Reserva crearReserva(String tipoUsuario, int idUsuario, Date fechaHora, int duracionMinutos, int idPista, int numeroAdultos, int numeroNinos, boolean tieneAntiguedad) {
         Reserva reservaEspecifica;
@@ -32,13 +51,23 @@ public class ReservaIndividualFactory extends ReservaFactory {
             // Calculamos si el jugador tiene más de 2 años de antigüedad
             if (jugador.calcularAntiguedad() > 2) {
                 reservaEspecifica.setDescuento(0.10f);  // Aplicar 10% de descuento
+                System.out.println("Descuento del 10% aplicado para el jugador con ID: " + idUsuario);
+            } else {
+                System.out.println("El jugador con ID " + idUsuario + " no tiene antigüedad suficiente para el descuento.");
             }
+        } else {
+            System.out.println("Jugador no encontrado para el ID: " + idUsuario);
         }
 
         // Retornar una instancia de ReservaIndividual con la reserva específica y posible descuento aplicado
         return new ReservaIndividual(idUsuario, fechaHora, duracionMinutos, idPista, reservaEspecifica);
     }
-    
+
+    /**
+     * Este método no está soportado en {@code ReservaIndividualFactory} y lanzará una excepción si se llama.
+     *
+     * @throws UnsupportedOperationException Siempre se lanza si se intenta crear una reserva de bono.
+     */
     @Override
     public Reserva crearReservaBono(String tipoUsuario, int idUsuario, Date fechaHora, int duracionMinutos, int idPista, int numeroAdultos, int numeroNinos, Bono bono, int numeroSesion) {
         throw new UnsupportedOperationException("ReservaIndividualFactory no puede crear reservas de bono.");

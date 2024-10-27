@@ -51,12 +51,7 @@ public class ReservaIndividualFactory extends ReservaFactory {
             // Calculamos si el jugador tiene más de 2 años de antigüedad
             if (jugador.calcularAntiguedad() > 2) {
                 reservaEspecifica.setDescuento(0.10f);  // Aplicar 10% de descuento
-                System.out.println("Descuento del 10% aplicado para el jugador con ID: " + idUsuario);
-            } else {
-                System.out.println("El jugador con ID " + idUsuario + " no tiene antigüedad suficiente para el descuento.");
-            }
-        } else {
-            System.out.println("Jugador no encontrado para el ID: " + idUsuario);
+            } 
         }
 
         // Retornar una instancia de ReservaIndividual con la reserva específica y posible descuento aplicado
